@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #1a2c0a;
+  --green: #263e0f;
+  --green-deep: #1a2c0a;
+  --green-light: #2f4a12;
+  --text: #FFFFFF;
+  --text-soft: rgba(255,255,255,0.78);
+  --gold: #996515;
+  --gold-light: #d4a24c;
+  --gold-deep: #5e3d0c;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Lato', 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 17px;
+  color: var(--text);
+  background: var(--green-deep);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+@keyframes floatUp {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+  100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes hintFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+
+@keyframes shimmerSweep {
+  0%   { left: -130%; }
+  55%  { left: 200%; }
+  100% { left: 200%; }
+}
+
+@keyframes vinylSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes vinylPulse {
+  0%, 100% { transform: scale(1);    opacity: 0.32; }
+  50%       { transform: scale(1.18); opacity: 0.06; }
+}
+
+@keyframes envBreathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.03); }
+}
+
+@keyframes dustTwinkle {
+  0%, 100% { opacity: 0.15; transform: translateY(0) scale(0.7); }
+  50%      { opacity: 0.95; transform: translateY(-6px) scale(1.1); }
+}
+
+/* ===== Border beam — luz dorada que recorre el borde de las cards de Lugares ===== */
+.venue-beam {
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  padding: 2px;            /* grosor del haz */
+  pointer-events: none;
+  z-index: 3;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+}
+.venue-beam::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 240%;
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(from 0deg,
+    rgba(212,162,76,0) 0deg,
+    rgba(212,162,76,0) 210deg,
+    rgba(212,162,76,0.5) 288deg,
+    #fff4d6 332deg,
+    #d4a24c 346deg,
+    rgba(212,162,76,0) 360deg);
+  animation: beamSpin 4.5s linear infinite;
+}
+@keyframes beamSpin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .venue-beam::before { animation: none; }
+}
+
+.rv {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.rv.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
