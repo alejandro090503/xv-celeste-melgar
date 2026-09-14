@@ -4,50 +4,230 @@ import { useEffect, useRef, useState } from "react";
 const BASE = "https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/img/xv-celeste-melgar";
 
 const FOTOS = [
-  { src: `${BASE}/carrusel-01.jpg`, alt: "Celeste sonriendo", pos: "center 25%", rot: -6 },
-  { src: `${BASE}/hero.jpg`, alt: "Celeste de espaldas, atardecer", pos: "center 30%", rot: 5 },
-  { src: `${BASE}/carrusel-02.jpg`, alt: "Celeste de niña", pos: "center 20%", rot: 7 },
-  { src: `${BASE}/framed-arco.jpg`, alt: "Celeste en el arco de piedra", pos: "center 35%", rot: -8 },
-  { src: `${BASE}/framed-jardin.jpg`, alt: "Celeste en el jardín de glicinas", pos: "center 30%", rot: 4 },
-  { src: `${BASE}/closing.jpg`, alt: "Celeste en el bosque encantado", pos: "center 30%", rot: -4 },
+  { src: `${BASE}/carrusel-01.jpg`, alt: "Celeste sonriendo", pos: "center 25%" },
+  { src: `${BASE}/hero.jpg`, alt: "Celeste de espaldas, atardecer", pos: "center 30%" },
+  { src: `${BASE}/carrusel-02.jpg`, alt: "Celeste de niña", pos: "center 20%" },
+  { src: `${BASE}/framed-arco.jpg`, alt: "Celeste en el arco de piedra", pos: "center 35%" },
+  { src: `${BASE}/framed-jardin.jpg`, alt: "Celeste en el jardín de glicinas", pos: "center 30%" },
+  { src: `${BASE}/closing.jpg`, alt: "Celeste en el bosque encantado", pos: "center 30%" },
 ];
+
+const N = FOTOS.length;
+const STEP = 360 / N;
+
+// Ancho de tarjeta como fracción del contenedor (55-60% en móvil), con límites
+// razonables para no verse absurda en pantallas más anchas.
+const CARD_RATIO = 0.57;
+const CARD_MIN = 140;
+const CARD_MAX = 236;
+const CARD_ASPECT = 3 / 4; // ancho:alto
 
 export default function Carrusel() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [fallen, setFallen] = useState(false);
+  const sceneRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
   const [lightbox, setLightbox] = useState<number | null>(null);
 
+  // ───── Rueda 3D: geometría responsiva + auto-rotación + drag con inercia ─────
   useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    let done = false;
-    const trigger = () => {
-      if (done) return;
-      done = true;
-      setFallen(true);
-    };
-    // Fallback seguro: si el IntersectionObserver no dispara (preview / navegador raro),
-    // las polaroids se muestran de todas formas tras un tiempo.
-    const fallbackTimer = setTimeout(trigger, 2600);
-    let observer: IntersectionObserver | undefined;
-    try {
-      observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            trigger();
-            observer?.disconnect();
-          }
-        },
-        { threshold: 0.15 }
-      );
-      observer.observe(el);
-    } catch {
-      trigger();
+    const scene = sceneRef.current;
+    const ring = ringRef.current;
+    if (!scene || !ring) return;
+
+    const cards = Array.from(ring.querySelectorAll<HTMLElement>(".wheel-card"));
+    if (!cards.length) return;
+
+    const reduceMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let cardW = 200;
+    let cardH = 200 / CARD_ASPECT;
+    let radius = 360;
+
+    // Coloca cada tarjeta en su posición fija sobre el círculo. Se ejecuta
+    // de forma síncrona (sin depender de rAF) para que, aunque el rAF esté
+    // congelado (p. ej. en el preview), la rueda ya se vea correcta y estática.
+    function layout() {
+      const w = scene!.clientWidth || 360; // fallback si el contenedor mide 0
+      cardW = Math.min(CARD_MAX, Math.max(CARD_MIN, w * CARD_RATIO));
+      cardH = cardW / CARD_ASPECT;
+      // Radio: la cuerda entre dos tarjetas vecinas iguala ~ el ancho de tarjeta,
+      // para que queden pegadas sin traslaparse en la rueda de 6 caras.
+      radius = Math.round((cardW + 14) / (2 * Math.sin(Math.PI / N)));
+
+      scene!.style.height = `${Math.round(cardH + 64)}px`;
+
+      cards.forEach((card, i) => {
+        card.style.width = `${cardW}px`;
+        card.style.height = `${cardH}px`;
+        card.style.marginLeft = `${-cardW / 2}px`;
+        card.style.marginTop = `${-cardH / 2}px`;
+        card.style.transform = `rotateY(${STEP * i}deg) translateZ(${radius}px)`;
+      });
     }
-    return () => {
-      clearTimeout(fallbackTimer);
-      observer?.disconnect();
+
+    layout();
+
+    let ro: ResizeObserver | undefined;
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(() => layout());
+      ro.observe(scene);
+    }
+    const onResize = () => layout();
+    window.addEventListener("resize", onResize);
+
+    // ───── Estado de rotación del anillo completo ─────
+    let rot = 0;
+    let vel = 0;
+    let mode: "auto" | "idle" | "inertia" | "tween" = reduceMotion ? "idle" : "auto";
+    let tweenFrom = 0;
+    let tweenTo = 0;
+    let tweenStart = 0;
+    const TWEEN_MS = 520;
+
+    let isDrag = false;
+    let startX = 0;
+    let lastX = 0;
+    let startRot = 0;
+    let moved = 0;
+    let resumeTimer: ReturnType<typeof setTimeout> | undefined;
+
+    function setRot(deg: number) {
+      rot = deg;
+      ring!.style.transform = `rotateY(${rot}deg)`;
+    }
+    setRot(0);
+
+    function scheduleResume() {
+      if (reduceMotion) return;
+      if (resumeTimer) clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(() => {
+        if (!isDrag) mode = "auto";
+      }, 1800);
+    }
+
+    function easeOutCubic(t: number) {
+      return 1 - Math.pow(1 - t, 3);
+    }
+
+    let raf = 0;
+    let last = performance.now();
+    function frame(now: number) {
+      const dt = now - last;
+      last = now;
+      if (mode === "auto") {
+        // ~4°/s → una vuelta completa cada 90s, lenta y elegante.
+        setRot(rot + dt * 0.0445);
+      } else if (mode === "inertia") {
+        setRot(rot + vel * (dt / 16.7));
+        vel *= 0.94;
+        if (Math.abs(vel) < 0.02) {
+          mode = "idle";
+          scheduleResume();
+        }
+      } else if (mode === "tween") {
+        const t = Math.min(1, (now - tweenStart) / TWEEN_MS);
+        setRot(tweenFrom + (tweenTo - tweenFrom) * easeOutCubic(t));
+        if (t >= 1) {
+          mode = "idle";
+          scheduleResume();
+        }
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    raf = requestAnimationFrame(frame);
+
+    function pointerDown(x: number) {
+      isDrag = true;
+      moved = 0;
+      mode = "idle";
+      if (resumeTimer) clearTimeout(resumeTimer);
+      ring!.classList.add("dragging");
+      startX = x;
+      lastX = x;
+      startRot = rot;
+      vel = 0;
+    }
+    function pointerMove(x: number) {
+      if (!isDrag) return;
+      moved = Math.max(moved, Math.abs(x - startX));
+      const next = startRot + (x - startX) * 0.4;
+      vel = (x - lastX) * 0.5;
+      lastX = x;
+      setRot(next);
+    }
+    function pointerUp() {
+      if (!isDrag) return;
+      isDrag = false;
+      ring!.classList.remove("dragging");
+      if (Math.abs(vel) > 0.05) {
+        mode = "inertia";
+      } else {
+        mode = "idle";
+        scheduleResume();
+      }
+    }
+
+    const onMouseDown = (e: MouseEvent) => {
+      e.preventDefault();
+      pointerDown(e.clientX);
     };
+    const onMouseMove = (e: MouseEvent) => pointerMove(e.clientX);
+    const onMouseUp = () => pointerUp();
+    const onTouchStart = (e: TouchEvent) => pointerDown(e.touches[0].clientX);
+    const onTouchMove = (e: TouchEvent) => pointerMove(e.touches[0].clientX);
+    const onTouchEnd = () => pointerUp();
+
+    ring.addEventListener("mousedown", onMouseDown);
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+    ring.addEventListener("touchstart", onTouchStart, { passive: true });
+    ring.addEventListener("touchmove", onTouchMove, { passive: true });
+    ring.addEventListener("touchend", onTouchEnd);
+
+    // Clic (sin arrastre) sobre una tarjeta abre el lightbox.
+    const clickHandlers: Array<[HTMLElement, (e: Event) => void]> = [];
+    cards.forEach((card, i) => {
+      const handler = () => {
+        if (moved > 8) return;
+        setLightbox(i);
+      };
+      card.addEventListener("click", handler);
+      clickHandlers.push([card, handler]);
+    });
+
+    // Botones prev/next: avanzan una tarjeta con una animación suave.
+    function step(dir: 1 | -1) {
+      isDrag = false;
+      if (resumeTimer) clearTimeout(resumeTimer);
+      if (reduceMotion) {
+        setRot(rot + dir * STEP);
+        mode = "idle";
+        return;
+      }
+      tweenFrom = rot;
+      tweenTo = rot + dir * STEP;
+      tweenStart = performance.now();
+      mode = "tween";
+    }
+    (ring as HTMLDivElement & { __wheelStep?: (dir: 1 | -1) => void }).__wheelStep = step;
+
+    return () => {
+      cancelAnimationFrame(raf);
+      if (resumeTimer) clearTimeout(resumeTimer);
+      ro?.disconnect();
+      window.removeEventListener("resize", onResize);
+      ring.removeEventListener("mousedown", onMouseDown);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+      ring.removeEventListener("touchstart", onTouchStart);
+      ring.removeEventListener("touchmove", onTouchMove);
+      ring.removeEventListener("touchend", onTouchEnd);
+      clickHandlers.forEach(([card, handler]) => card.removeEventListener("click", handler));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -59,25 +239,36 @@ export default function Carrusel() {
     return () => window.removeEventListener("keydown", onKey);
   }, [lightbox]);
 
+  function goStep(dir: 1 | -1) {
+    const ring = ringRef.current as (HTMLDivElement & { __wheelStep?: (dir: 1 | -1) => void }) | null;
+    ring?.__wheelStep?.(dir);
+  }
+
   return (
-    <section ref={sectionRef} style={{ padding: "64px 0 56px" }}>
+    <section ref={sectionRef} style={{ padding: "64px 0 56px", overflowX: "hidden" }}>
       <style>{`
-        @keyframes polaFall {
-          0%   { opacity: 0; transform: translateY(-140px) rotate(0deg) scale(0.92); }
-          62%  { opacity: 1; transform: translateY(14px) rotate(var(--pr)) scale(1.02); }
-          80%  { transform: translateY(-4px) rotate(var(--pr)) scale(1); }
-          100% { opacity: 1; transform: translateY(0) rotate(var(--pr)) scale(1); }
+        .wheel-scene{ position:relative; width:100%; perspective:1000px; margin:0 auto; }
+        .wheel-ring{ position:absolute; inset:0; width:100%; height:100%; transform-style:preserve-3d; cursor:grab; }
+        .wheel-ring.dragging{ cursor:grabbing; }
+        .wheel-card{
+          position:absolute; left:50%; top:50%;
+          border-radius:6px; overflow:hidden;
+          background:#1a2c0a;
+          box-shadow:0 14px 34px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.25);
+          cursor:pointer; user-select:none; -webkit-user-select:none;
+          padding:0; border:none;
         }
-        .pola-card {
-          opacity: 0;
-          transform: translateY(-140px) rotate(0deg);
+        .wheel-card img{ width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; }
+        .wheel-nav-btn{
+          width:38px; height:38px; border-radius:50%;
+          background:rgba(255,255,255,0.06); border:1px solid rgba(212,162,76,0.45);
+          color:#e9c77b; font-size:17px; cursor:pointer;
+          display:flex; align-items:center; justify-content:center;
+          -webkit-tap-highlight-color:transparent;
         }
-        .pola-card.fallen {
-          animation: polaFall 0.95s cubic-bezier(.22,.85,.4,1.1) forwards;
-          animation-delay: var(--pd);
-        }
+        .wheel-nav-btn:active{ background:rgba(212,162,76,0.18); }
         @media (prefers-reduced-motion: reduce) {
-          .pola-card { opacity: 1 !important; transform: rotate(var(--pr)) !important; animation: none !important; }
+          .wheel-ring{ transition:none !important; }
         }
       `}</style>
 
@@ -111,69 +302,30 @@ export default function Carrusel() {
         </h2>
       </div>
 
-      {/* Grid de polaroids apiladas / escalonadas */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "10px 6px",
-        padding: "0 22px",
-        maxWidth: 420,
-        margin: "0 auto",
-      }}>
-        {FOTOS.map((foto, i) => (
-          <button
-            key={i}
-            onClick={() => setLightbox(i)}
-            aria-label={`Ver foto ${i + 1} en grande`}
-            className={`pola-card${fallen ? " fallen" : ""}`}
-            style={{
-              "--pr": `${foto.rot}deg`,
-              "--pd": `${i * 0.14}s`,
-              position: "relative",
-              marginTop: i % 2 === 1 ? 26 : 0,
-              padding: 0,
-              border: "none",
-              background: "none",
-              cursor: "pointer",
-              WebkitTapHighlightColor: "transparent",
-            } as React.CSSProperties}
-          >
-            <div style={{
-              background: "#f5efe0",
-              backgroundImage: "radial-gradient(rgba(150,120,70,0.05) 1px, transparent 1px)",
-              backgroundSize: "6px 6px",
-              padding: "8px 8px 26px",
-              borderRadius: 3,
-              boxShadow: "0 10px 22px rgba(0,0,0,0.42), 0 2px 4px rgba(0,0,0,0.2)",
-              position: "relative",
-            }}>
-              <div style={{ position: "relative", aspectRatio: "1 / 1", overflow: "hidden", background: "#1a2c0a" }}>
+      {/* Rueda 3D */}
+      <div style={{ overflow: "hidden", padding: "0 4px" }}>
+        <div ref={sceneRef} className="wheel-scene">
+          <div ref={ringRef} className="wheel-ring">
+            {FOTOS.map((foto, i) => (
+              <div key={i} className="wheel-card" style={{ position: "absolute" }}>
+                <span className="gold-border gold-border--thin" aria-hidden="true" />
                 <img
                   src={foto.src}
                   alt={foto.alt}
-                  style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: foto.pos, display: "block" }}
+                  loading="eager"
+                  decoding="async"
+                  style={{ objectPosition: foto.pos }}
                 />
-                <div style={{
-                  position: "absolute", inset: 0,
-                  boxShadow: "inset 0 0 0 1px rgba(153,101,21,0.35)",
-                  pointerEvents: "none",
-                }} />
               </div>
-              <div style={{
-                position: "absolute", bottom: 7, left: 0, right: 0,
-                textAlign: "center",
-                fontFamily: "var(--font-cormorant), serif",
-                fontStyle: "italic",
-                fontSize: 11,
-                letterSpacing: 1,
-                color: "#5e3d0c",
-                opacity: 0.7,
-              }}>
-                XV · Celeste
-              </div>
-            </div>
-          </button>
-        ))}
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Controles discretos */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 22, marginTop: 18 }}>
+        <button className="wheel-nav-btn" onClick={() => goStep(-1)} aria-label="Foto anterior">‹</button>
+        <button className="wheel-nav-btn" onClick={() => goStep(1)} aria-label="Foto siguiente">›</button>
       </div>
 
       {/* Pie decorativo */}
