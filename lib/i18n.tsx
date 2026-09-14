@@ -125,6 +125,8 @@ const dict = {
     },
     closing: {
       text: "Este día ha vivido en mis sueños, y su verdadera magia será estar rodeada de quienes han caminado conmigo.",
+      verse: "Para esta hora he llegado",
+      verseRef: "Ester 4:14",
     },
   },
   en: {
@@ -246,6 +248,8 @@ const dict = {
     },
     closing: {
       text: "This day has lived in my dreams, and its true magic will be being surrounded by those who have walked this journey with me.",
+      verse: "I have come for such a time as this",
+      verseRef: "Esther 4:14",
     },
   },
 };

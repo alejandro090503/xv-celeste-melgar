@@ -78,6 +78,14 @@ export default function ClosingPhoto() {
       }}>
         Celeste
       </div>
+      <div style={{ position: "relative", marginTop: 18, padding: "0 24px", textAlign: "center" }}>
+        <p className="gold-text gold-text--slow" style={{ fontFamily: "var(--font-great-vibes), cursive", fontSize: "clamp(28px, 8vw, 38px)", lineHeight: 1.35, display: "inline-block", filter: "drop-shadow(0 2px 10px rgba(0,0,0,0.55))" }}>
+          {t.closing.verse}
+        </p>
+        <p style={{ fontFamily: "var(--font-cormorant), serif", fontStyle: "italic", fontWeight: 600, fontSize: 17, letterSpacing: 2, color: "#e9c77b", marginTop: 4, textShadow: "0 1px 8px rgba(0,0,0,0.6)" }}>
+          {t.closing.verseRef}
+        </p>
+      </div>
     </section>
   );
 }
