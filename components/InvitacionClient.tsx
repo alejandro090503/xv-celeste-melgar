@@ -8,7 +8,6 @@ import Ubicacion from "./Ubicacion";
 import CalendarioBtn from "./CalendarioBtn";
 import DressCode from "./DressCode";
 import Familia from "./Familia";
-import MesaRegalos from "./MesaRegalos";
 import PhotoFrame from "./PhotoFrame";
 import RSVPSection from "./RSVPSection";
 import Carrusel from "./Carrusel";
@@ -18,7 +17,6 @@ import MusicFab, { type MusicFabHandle } from "./MusicFab";
 import LangFab from "./LangFab";
 import GoldDust from "./GoldDust";
 import ScrollReveal from "./ScrollReveal";
-import NoNinos from "./NoNinos";
 import AlbumQR from "./AlbumQR";
 import { useLang } from "@/lib/i18n";
 
@@ -127,10 +125,6 @@ export default function InvitacionClient() {
           <Ornament />
         </ScrollReveal>
 
-        <ScrollReveal>
-          <MesaRegalos />
-        </ScrollReveal>
-
         {/* Foto 2 — marco rasgado */}
         <ScrollReveal>
           <PhotoFrame />
@@ -142,10 +136,6 @@ export default function InvitacionClient() {
 
         <ScrollReveal>
           <Ornament />
-        </ScrollReveal>
-
-        <ScrollReveal>
-          <NoNinos />
         </ScrollReveal>
 
         <ScrollReveal>

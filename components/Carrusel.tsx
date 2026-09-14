@@ -61,7 +61,7 @@ export default function Carrusel() {
       // para que queden pegadas sin traslaparse en la rueda de 6 caras.
       radius = Math.round((cardW + 14) / (2 * Math.sin(Math.PI / N)));
 
-      scene!.style.height = `${Math.round(cardH + 64)}px`;
+      scene!.style.height = `${Math.round(cardH + 150)}px`;
 
       cards.forEach((card, i) => {
         card.style.width = `${cardW}px`;
@@ -122,8 +122,8 @@ export default function Carrusel() {
       const dt = now - last;
       last = now;
       if (mode === "auto") {
-        // ~4°/s → una vuelta completa cada 90s, lenta y elegante.
-        setRot(rot + dt * 0.0445);
+        // una vuelta completa cada ~140s, lenta y elegante.
+        setRot(rot + dt * 0.02861);
       } else if (mode === "inertia") {
         setRot(rot + vel * (dt / 16.7));
         vel *= 0.94;
@@ -307,7 +307,7 @@ export default function Carrusel() {
       </div>
 
       {/* Rueda 3D */}
-      <div style={{ overflow: "hidden", padding: "0 4px" }}>
+      <div style={{ overflow: "visible", padding: "0 2px" }}>
         <div ref={sceneRef} className="wheel-scene">
           <div ref={ringRef} className="wheel-ring">
             {FOTOS.map((foto, i) => (

@@ -141,12 +141,12 @@ export default function Ubicacion() {
         />
         <VenueCard
           type={t.ubicacion.recepcion}
-          name={t.ubicacion.porConfirmar}
-          address={t.ubicacion.porConfirmar}
+          name="1415 Broadway"
+          address="1415 Broadway, Alameda, CA 94501"
           time="6:00 PM"
-          mapsUrl=""
-          lat={37.8044}
-          lng={-122.2712}
+          mapsUrl="https://www.google.com/maps/search/?api=1&query=1415+Broadway+Alameda+CA+94501"
+          lat={37.7681}
+          lng={-122.2469}
         />
       </div>
     </section>
