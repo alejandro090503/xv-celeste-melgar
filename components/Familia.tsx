@@ -50,7 +50,7 @@ function Block({ label, names, icon, rounded }: { label: string; names: React.Re
 }
 
 const Amp = () => (
-  <span style={{ display: "block", fontStyle: "italic", fontSize: 30, color: "#996515", lineHeight: 1.1, margin: "4px 0" }}>&amp;</span>
+  <span className="gold-text gold-text--slow" style={{ display: "block", fontStyle: "italic", fontSize: 30, lineHeight: 1.1, margin: "4px auto", width: "fit-content" }}>&amp;</span>
 );
 
 export default function Familia() {
