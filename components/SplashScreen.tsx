@@ -6,8 +6,8 @@ interface Props {
   onOpen: () => void;   // se llama al terminar el video — revela invitación
 }
 
-const POSTER = "https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/img/xv-julia-sofia/sobre-poster.jpg";
-const VIDEO = "https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/video/xv-julia-sofia/sobre.mp4";
+const POSTER = "https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/img/xv-celeste-melgar/sobre-poster.jpg";
+const VIDEO = "https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/video/xv-celeste-melgar/sobre.mp4";
 
 export default function SplashScreen({ onStart, onOpen }: Props) {
   const screenRef = useRef<HTMLDivElement>(null);
