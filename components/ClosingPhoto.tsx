@@ -54,7 +54,7 @@ export default function ClosingPhoto() {
         lineHeight: 1.25,
         padding: "0 30px",
         overflow: "visible",
-        background: "linear-gradient(135deg,#996515 0%,#d4a24c 50%,#996515 100%)",
+        background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite",
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
         backgroundClip: "text",
@@ -70,7 +70,7 @@ export default function ClosingPhoto() {
         fontSize: 15,
         letterSpacing: 6,
         textTransform: "uppercase",
-        color: "#d4a24c",
+        color: "#e9c77b",
         marginTop: 6,
         textShadow: "0 1px 8px rgba(0,0,0,0.5)",
       }}>

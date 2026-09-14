@@ -28,7 +28,7 @@ function Block({ label, names, icon, rounded }: { label: string; names: React.Re
         fontSize: 15,
         letterSpacing: 6,
         textTransform: "uppercase",
-        color: "#d4a24c",
+        color: "#e9c77b",
         marginBottom: 14,
       }}>
         {label}
@@ -60,7 +60,7 @@ export default function Familia() {
         fontSize: 14,
         letterSpacing: 5,
         textTransform: "uppercase",
-        color: "#d4a24c",
+        color: "#e9c77b",
         textAlign: "center",
         marginBottom: 8,
         opacity: 0.9,
@@ -74,7 +74,7 @@ export default function Familia() {
         lineHeight: 1.25,
         marginBottom: 30,
         padding: "6px 24px 10px",
-        background: "linear-gradient(135deg,#996515 0%,#d4a24c 50%,#996515 100%)",
+        background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite",
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
         backgroundClip: "text",
@@ -88,7 +88,7 @@ export default function Familia() {
           rounded="24px"
           label="Mis Padres"
           icon={
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#d4a24c" strokeWidth="1.55" strokeLinecap="round" strokeLinejoin="round">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#e0b866" strokeWidth="1.55" strokeLinecap="round" strokeLinejoin="round">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
               <circle cx="12" cy="7" r="4" />
             </svg>
@@ -99,7 +99,7 @@ export default function Familia() {
           rounded="24px"
           label="Mis Padrinos"
           icon={
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#d4a24c" strokeWidth="1.55" strokeLinecap="round" strokeLinejoin="round">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#e0b866" strokeWidth="1.55" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2 L13.7 8.4 L20 9 L15 13.5 L16.5 20 L12 16.5 L7.5 20 L9 13.5 L4 9 L10.3 8.4 Z" />
             </svg>
           }

@@ -33,14 +33,14 @@ function VenueCard({ type, name, address, time, mapsUrl, lat, lng }: VenueProps)
           border: "1.5px solid rgba(212,162,76,0.4)",
           display: "flex", alignItems: "center", justifyContent: "center",
         }}>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="#d4a24c">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#e0b866">
             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
           </svg>
         </div>
 
         <div style={{
           fontFamily: "var(--font-great-vibes), cursive",
-          fontSize: 42, color: "#d4a24c", lineHeight: 1.15, marginBottom: 10,
+          fontSize: 42, color: "#e9c77b", lineHeight: 1.15, marginBottom: 10,
         }}>
           {type}
         </div>
@@ -63,14 +63,14 @@ function VenueCard({ type, name, address, time, mapsUrl, lat, lng }: VenueProps)
 
         <div style={{
           fontFamily: "var(--font-lato), sans-serif",
-          fontWeight: 700, fontSize: 20, color: "#d4a24c",
+          fontWeight: 700, fontSize: 20, color: "#e9c77b",
           letterSpacing: 3, marginBottom: 4,
         }}>
           {time}
         </div>
 
         <div style={{ width: 48, height: 1, margin: "18px auto 22px",
-          background: "linear-gradient(90deg,transparent,#996515,transparent)", opacity: 0.4 }} />
+          background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite", opacity: 0.4 }} />
       </div>
 
       {mapsUrl && (
@@ -78,7 +78,7 @@ function VenueCard({ type, name, address, time, mapsUrl, lat, lng }: VenueProps)
           <a href={mapsUrl} target="_blank" rel="noopener noreferrer"
             style={{
               display: "inline-block", marginTop: 8, padding: "14px 32px",
-              background: "linear-gradient(135deg,#996515,#5e3d0c)",
+              background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite",
               color: "#1a2c0a", borderRadius: 30,
               fontFamily: "var(--font-lato), sans-serif",
               fontSize: 14, fontWeight: 800, textTransform: "uppercase",
@@ -111,7 +111,7 @@ export default function Ubicacion() {
       <p style={{
         fontFamily: "var(--font-cormorant), serif",
         fontStyle: "italic", fontSize: 14, letterSpacing: 5,
-        textTransform: "uppercase", color: "#d4a24c",
+        textTransform: "uppercase", color: "#e9c77b",
         textAlign: "center", marginBottom: 8, opacity: 0.9, fontWeight: 600,
       }}>
         Te esperamos en
@@ -119,7 +119,7 @@ export default function Ubicacion() {
       <h2 style={{
         fontFamily: "var(--font-great-vibes), cursive",
         fontSize: 50, textAlign: "center", lineHeight: 1.1, marginBottom: 30,
-        background: "linear-gradient(135deg,#996515 0%,#d4a24c 50%,#996515 100%)",
+        background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite",
         WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
       }}>
         Lugares

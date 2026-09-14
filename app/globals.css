@@ -114,3 +114,74 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ===== Oro metálico real con brillo lento (goldSweep) ===== */
+@keyframes goldSweep {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes goldGlow {
+  0%   { filter: drop-shadow(0 0 2px rgba(241,213,143,0.4)) brightness(1); }
+  100% { filter: drop-shadow(0 0 8px rgba(255,243,207,0.85)) brightness(1.25); }
+}
+
+:root {
+  --gold-metal-gradient: linear-gradient(
+    100deg,
+    #5e3d0c 0%,
+    #996515 10%,
+    #c8913a 20%,
+    #e9c77b 30%,
+    #FFF3CF 40%,
+    #e9c77b 50%,
+    #c8913a 60%,
+    #996515 70%,
+    #7a5212 78%,
+    #b8862f 86%,
+    #f1d58f 94%,
+    #996515 100%
+  );
+}
+
+.gold-text {
+  background-image: var(--gold-metal-gradient);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: goldSweep 6s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(233,199,123,0.35)) drop-shadow(0 2px 2px rgba(0,0,0,0.45));
+  padding-left: .34em;
+  padding-right: .34em;
+  margin-left: -.34em;
+  margin-right: -.34em;
+}
+
+.gold-fill {
+  background-image: var(--gold-metal-gradient);
+  background-size: 300% 100%;
+  animation: goldSweep 6s linear infinite;
+  color: #1a2c0a;
+}
+
+.gold-glow {
+  animation: goldGlow 4s ease-in-out infinite alternate;
+}
+
+.gold-line {
+  background-image: var(--gold-metal-gradient);
+  background-size: 300% 100%;
+  animation: goldSweep 6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gold-text, .gold-fill, .gold-line {
+    animation: none;
+    background-position: 50% center;
+  }
+  .gold-glow {
+    animation: none;
+    filter: drop-shadow(0 0 4px rgba(241,213,143,0.5));
+  }
+}

@@ -11,7 +11,7 @@ export default function NoNinos() {
         border: "1px solid rgba(212,162,76,0.30)",
         borderRadius: 20,
       }}>
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#d4a24c" strokeWidth="1.6"
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#e0b866" strokeWidth="1.6"
           style={{ margin: "0 auto 10px" }}>
           <circle cx="12" cy="8" r="4" />
           <path d="M4 21v-1a8 8 0 0 1 16 0v1" />

@@ -13,7 +13,7 @@ export default function MesaRegalos() {
         fontSize: 14,
         letterSpacing: 5,
         textTransform: "uppercase",
-        color: "#d4a24c",
+        color: "#e9c77b",
         marginBottom: 8,
         opacity: 0.9,
       }}>
@@ -25,7 +25,7 @@ export default function MesaRegalos() {
         lineHeight: 1.2,
         marginBottom: 14,
         padding: "4px 20px 8px",
-        background: "linear-gradient(135deg,#996515 0%,#d4a24c 50%,#996515 100%)",
+        background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite",
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
         backgroundClip: "text",
@@ -78,14 +78,14 @@ export default function MesaRegalos() {
               <rect x="18" y="52" width="224" height="132" rx="10" fill="url(#js-env-fill)" stroke="rgba(212,162,76,0.6)" strokeWidth="1.4" />
               <path d="M18 184 L130 110 L242 184" stroke="rgba(212,162,76,0.4)" strokeWidth="1" fill="none" />
               {/* Líneas decorativas (lluvia) */}
-              <line x1="90"  y1="30" x2="90"  y2="20" stroke="#d4a24c" strokeWidth="1.3" strokeLinecap="round" opacity=".55" />
-              <line x1="130" y1="24" x2="130" y2="14" stroke="#d4a24c" strokeWidth="1.3" strokeLinecap="round" opacity=".7" />
-              <line x1="170" y1="30" x2="170" y2="20" stroke="#d4a24c" strokeWidth="1.3" strokeLinecap="round" opacity=".55" />
+              <line x1="90"  y1="30" x2="90"  y2="20" stroke="#e0b866" strokeWidth="1.3" strokeLinecap="round" opacity=".55" />
+              <line x1="130" y1="24" x2="130" y2="14" stroke="#e0b866" strokeWidth="1.3" strokeLinecap="round" opacity=".7" />
+              <line x1="170" y1="30" x2="170" y2="20" stroke="#e0b866" strokeWidth="1.3" strokeLinecap="round" opacity=".55" />
               <line x1="110" y1="18" x2="110" y2="10" stroke="#996515" strokeWidth="1"   strokeLinecap="round" opacity=".5" />
               <line x1="150" y1="18" x2="150" y2="10" stroke="#996515" strokeWidth="1"   strokeLinecap="round" opacity=".5" />
               {/* Sello J&S */}
               <circle cx="130" cy="118" r="16" fill="rgba(212,162,76,0.16)" stroke="rgba(212,162,76,0.6)" strokeWidth="1" />
-              <text x="130" y="123" textAnchor="middle" fontFamily="Georgia,serif" fontSize="11" fill="#d4a24c" opacity=".95">CM</text>
+              <text x="130" y="123" textAnchor="middle" fontFamily="Georgia,serif" fontSize="11" fill="#e0b866" opacity=".95">CM</text>
             </svg>
 
             {/* Solapa animable */}
@@ -124,7 +124,7 @@ export default function MesaRegalos() {
             padding: "0 20px",
             pointerEvents: open ? "auto" : "none",
           }}>
-            <svg width="40" height="40" viewBox="0 0 52 52" fill="none" stroke="#d4a24c" strokeWidth="1.5" style={{ marginTop: 12 }} aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 52 52" fill="none" stroke="#e0b866" strokeWidth="1.5" style={{ marginTop: 12 }} aria-hidden="true">
               <rect x="8" y="22" width="36" height="24" rx="5" />
               <path d="M8 30 Q26 38 44 30" />
               <rect x="18" y="8" width="16" height="16" rx="2" />
@@ -133,7 +133,7 @@ export default function MesaRegalos() {
             <p style={{
               fontFamily: "var(--font-great-vibes), cursive",
               fontSize: 34,
-              color: "#d4a24c",
+              color: "#e9c77b",
               lineHeight: 1.2,
             }}>
               Lluvia de Sobres
@@ -156,7 +156,7 @@ export default function MesaRegalos() {
           fontSize: 11,
           letterSpacing: 3,
           textTransform: "uppercase",
-          color: "#d4a24c",
+          color: "#e9c77b",
           opacity: open ? 0 : 0.9,
           transition: "opacity .3s",
           marginTop: 8,

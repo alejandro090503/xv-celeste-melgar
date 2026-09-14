@@ -78,7 +78,9 @@ function FlipUnit({ value, label }: { value: string; label: string }) {
           lineHeight: 1,
           letterSpacing: "-1px",
           fontVariantNumeric: "tabular-nums",
-          background: "linear-gradient(160deg,#996515 0%,#d4a24c 45%,#996515 100%)",
+          background: "var(--gold-metal-gradient)",
+          backgroundSize: "300% 100%",
+          animation: "goldSweep 6s linear infinite",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
           backgroundClip: "text",
@@ -96,7 +98,7 @@ function FlipUnit({ value, label }: { value: string; label: string }) {
         fontSize: 11,
         letterSpacing: "2.5px",
         textTransform: "uppercase",
-        color: "#d4a24c",
+        color: "#e9c77b",
         marginTop: 12,
         opacity: 0.9,
       }}>
@@ -119,7 +121,7 @@ export default function CountdownTimer() {
       <h2 style={{
         fontFamily: "var(--font-great-vibes), cursive",
         fontSize: 50, textAlign: "center", lineHeight: 1.1, marginBottom: 8,
-        background: "linear-gradient(135deg,#996515 0%,#d4a24c 50%,#996515 100%)",
+        background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite",
         WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
       }}>
         Faltan

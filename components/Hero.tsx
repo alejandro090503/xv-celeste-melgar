@@ -3,34 +3,34 @@ import { useEffect, useRef } from "react";
 import { PHOTOS } from "./photos";
 
 const PARTICLES = [
-  { left: "7%",  size: 4, dur: 9,  del: 0,   color: "#d4a24c" },
+  { left: "7%",  size: 4, dur: 9,  del: 0,   color: "#e9c77b" },
   { left: "21%", size: 3, dur: 12, del: 1.4, color: "rgba(212,162,76,0.5)" },
-  { left: "36%", size: 5, dur: 8,  del: 0.6, color: "#d4a24c" },
+  { left: "36%", size: 5, dur: 8,  del: 0.6, color: "#e9c77b" },
   { left: "54%", size: 3, dur: 10, del: 2.2, color: "rgba(212,162,76,0.5)" },
-  { left: "69%", size: 4, dur: 11, del: 0.9, color: "#d4a24c" },
+  { left: "69%", size: 4, dur: 11, del: 0.9, color: "#e9c77b" },
   { left: "84%", size: 3, dur: 9,  del: 1.8, color: "rgba(212,162,76,0.5)" },
-  { left: "13%", size: 5, dur: 13, del: 3.1, color: "#d4a24c" },
+  { left: "13%", size: 5, dur: 13, del: 3.1, color: "#e9c77b" },
   { left: "47%", size: 3, dur: 10, del: 2.7, color: "rgba(212,162,76,0.6)" },
-  { left: "75%", size: 4, dur: 12, del: 0.4, color: "#d4a24c" },
+  { left: "75%", size: 4, dur: 12, del: 0.4, color: "#e9c77b" },
   { left: "91%", size: 3, dur: 8,  del: 1.6, color: "rgba(212,162,76,0.5)" },
 ];
 
-const GOLD_TEXT = "linear-gradient(135deg,#996515 0%,#d4a24c 48%,#996515 100%)";
+const GOLD_TEXT = "var(--gold-metal-gradient)";
 
 function OrnamentBar() {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", padding: "0 10px" }}>
       <div style={{ flex: 1, height: 0.5, background: "linear-gradient(90deg, transparent, rgba(212,162,76,0.6))" }} />
       <svg width="5" height="5" viewBox="0 0 5 5">
-        <rect width="5" height="5" fill="#d4a24c" transform="rotate(45 2.5 2.5)" opacity="0.75" />
+        <rect width="5" height="5" fill="#e0b866" transform="rotate(45 2.5 2.5)" opacity="0.75" />
       </svg>
       <svg width="11" height="11" viewBox="0 0 11 11">
-        <rect x="1.5" y="1.5" width="8" height="8" fill="#d4a24c" transform="rotate(45 5.5 5.5)" opacity="0.9" />
+        <rect x="1.5" y="1.5" width="8" height="8" fill="#e0b866" transform="rotate(45 5.5 5.5)" opacity="0.9" />
         <rect x="3.5" y="3.5" width="4" height="4" fill="#1a2c0a" transform="rotate(45 5.5 5.5)" />
-        <rect x="4.5" y="4.5" width="2" height="2" fill="#d4a24c" transform="rotate(45 5.5 5.5)" opacity="0.85" />
+        <rect x="4.5" y="4.5" width="2" height="2" fill="#e0b866" transform="rotate(45 5.5 5.5)" opacity="0.85" />
       </svg>
       <svg width="5" height="5" viewBox="0 0 5 5">
-        <rect width="5" height="5" fill="#d4a24c" transform="rotate(45 2.5 2.5)" opacity="0.75" />
+        <rect width="5" height="5" fill="#e0b866" transform="rotate(45 2.5 2.5)" opacity="0.75" />
       </svg>
       <div style={{ flex: 1, height: 0.5, background: "linear-gradient(90deg, rgba(212,162,76,0.6), transparent)" }} />
     </div>
@@ -137,10 +137,12 @@ export default function Hero() {
             fontSize: "min(20vw, 100px)",
             lineHeight: 1.2,
             background: GOLD_TEXT,
+            backgroundSize: "300% 100%",
+            animation: "goldSweep 6s linear infinite",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
-            filter: "drop-shadow(0 3px 18px rgba(0,0,0,0.45))",
+            filter: "drop-shadow(0 3px 18px rgba(0,0,0,0.45)) drop-shadow(0 0 6px rgba(233,199,123,0.35))",
             margin: 0,
             padding: "4px 28px 12px 22px",
             opacity: 0,
@@ -191,6 +193,8 @@ export default function Hero() {
               lineHeight: 1,
               textIndent: 22,
               background: GOLD_TEXT,
+              backgroundSize: "300% 100%",
+              animation: "goldSweep 6s linear infinite",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
@@ -201,7 +205,7 @@ export default function Hero() {
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, margin: "8px 0 10px" }}>
               <div style={{ width: 22, height: 0.5, background: "rgba(212,162,76,0.5)" }} />
               <svg width="5" height="5" viewBox="0 0 5 5">
-                <rect width="5" height="5" fill="#d4a24c" transform="rotate(45 2.5 2.5)" opacity="0.85" />
+                <rect width="5" height="5" fill="#e0b866" transform="rotate(45 2.5 2.5)" opacity="0.85" />
               </svg>
               <div style={{ width: 22, height: 0.5, background: "rgba(212,162,76,0.5)" }} />
             </div>
@@ -213,7 +217,7 @@ export default function Hero() {
               fontSize: "clamp(20px, 5.5vw, 26px)",
               letterSpacing: 11,
               textTransform: "uppercase",
-              color: "#d4a24c",
+              color: "#e9c77b",
               textIndent: 11,
             }}>
               Años

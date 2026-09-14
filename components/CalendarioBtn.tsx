@@ -17,7 +17,7 @@ export default function CalendarioBtn() {
       <p style={{
         fontFamily: "var(--font-cormorant), serif",
         fontStyle: "italic", fontSize: 14, letterSpacing: 5,
-        textTransform: "uppercase", color: "#d4a24c",
+        textTransform: "uppercase", color: "#e9c77b",
         marginBottom: 8, opacity: 0.85, fontWeight: 600,
       }}>
         No lo olvides
@@ -25,7 +25,7 @@ export default function CalendarioBtn() {
       <h2 style={{
         fontFamily: "var(--font-great-vibes), cursive",
         fontSize: 48, lineHeight: 1.25, marginBottom: 16, padding: "4px 20px 8px",
-        background: "linear-gradient(135deg,#996515 0%,#d4a24c 50%,#996515 100%)",
+        background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite",
         WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
         display: "inline-block",
       }}>
@@ -41,7 +41,7 @@ export default function CalendarioBtn() {
       <a href={GCAL_URL} target="_blank" rel="noopener noreferrer"
         style={{
           display: "inline-block", padding: "14px 32px",
-          background: "linear-gradient(135deg,#996515,#5e3d0c)",
+          background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite",
           color: "#1a2c0a", borderRadius: 30,
           fontFamily: "var(--font-lato), sans-serif",
           fontSize: 14, fontWeight: 800, textTransform: "uppercase",

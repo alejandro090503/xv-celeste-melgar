@@ -12,7 +12,7 @@ export default function DressCode() {
         fontSize: 14,
         letterSpacing: 6,
         textTransform: "uppercase",
-        color: "#d4a24c",
+        color: "#e9c77b",
         marginBottom: 4,
         opacity: 0.9,
       }}>
@@ -23,7 +23,7 @@ export default function DressCode() {
         fontSize: 52,
         lineHeight: 1.1,
         marginBottom: 18,
-        background: "linear-gradient(135deg,#996515 0%,#d4a24c 50%,#996515 100%)",
+        background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite",
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
         backgroundClip: "text",
@@ -51,7 +51,7 @@ export default function DressCode() {
         fontSize: 22,
         letterSpacing: 8,
         textTransform: "uppercase",
-        color: "#d4a24c",
+        color: "#e9c77b",
         marginBottom: 36,
       }}>
         Formal
@@ -93,7 +93,7 @@ export default function DressCode() {
             background: "#1a2c0a",
             border: "1.5px solid rgba(212,162,76,0.5)",
             fontSize: 11, lineHeight: "20px", textAlign: "center",
-            color: "#d4a24c", fontWeight: 700,
+            color: "#e9c77b", fontWeight: 700,
           }}>
             ✕
           </div>

@@ -96,7 +96,7 @@ export default function Carrusel() {
           fontSize: 13,
           letterSpacing: 5,
           textTransform: "uppercase",
-          color: "#d4a24c",
+          color: "#e9c77b",
           marginBottom: 8,
           opacity: 0.85,
         }}>
@@ -106,7 +106,7 @@ export default function Carrusel() {
           fontFamily: "var(--font-great-vibes), cursive",
           fontSize: 48,
           lineHeight: 1.1,
-          background: "linear-gradient(135deg,#996515 0%,#d4a24c 50%,#996515 100%)",
+          background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
           backgroundClip: "text",
@@ -189,7 +189,7 @@ export default function Carrusel() {
               background: "rgba(26,44,10,0.65)", border: "1px solid rgba(212,162,76,0.35)",
               backdropFilter: "blur(8px)",
               display: "flex", alignItems: "center", justifyContent: "center",
-              cursor: "pointer", color: "#d4a24c", fontSize: 18,
+              cursor: "pointer", color: "#e9c77b", fontSize: 18,
               zIndex: 10,
             }}
           >
@@ -204,7 +204,7 @@ export default function Carrusel() {
               background: "rgba(26,44,10,0.65)", border: "1px solid rgba(212,162,76,0.35)",
               backdropFilter: "blur(8px)",
               display: "flex", alignItems: "center", justifyContent: "center",
-              cursor: "pointer", color: "#d4a24c", fontSize: 18,
+              cursor: "pointer", color: "#e9c77b", fontSize: 18,
               zIndex: 10,
             }}
           >

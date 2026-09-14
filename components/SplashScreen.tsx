@@ -118,7 +118,7 @@ export default function SplashScreen({ onStart, onOpen }: Props) {
             fontFamily: "var(--font-great-vibes), cursive",
             fontSize: "clamp(40px, 13vw, 60px)",
             lineHeight: 1.1,
-            color: "#d4a24c",
+            color: "#e9c77b",
             textShadow: "0 2px 16px rgba(0,0,0,0.7)",
             opacity: 0,
             transition: "opacity 0.8s ease",

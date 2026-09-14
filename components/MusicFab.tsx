@@ -44,10 +44,10 @@ const MusicFab = forwardRef<MusicFabHandle>((_, ref) => {
       position: "fixed", bottom: 24, right: 24, zIndex: 998,
       width: 68, height: 68, userSelect: "none",
     }}>
-      <div style={{
+      <div className="gold-glow" style={{
         position: "absolute", inset: -8, borderRadius: "50%",
         border: "1.5px solid rgba(212,162,76,0.30)",
-        animation: playing ? "vinylPulse 2.2s ease-in-out infinite" : "none",
+        animation: playing ? "vinylPulse 2.2s ease-in-out infinite" : undefined,
         pointerEvents: "none",
       }} />
 
@@ -134,7 +134,7 @@ const MusicFab = forwardRef<MusicFabHandle>((_, ref) => {
           transition: "opacity 0.35s ease",
           pointerEvents: "none",
         }}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="#d4a24c">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#e0b866">
             <path d="M8 5v14l11-7z" />
           </svg>
         </div>
