@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useLang, pasesLabel } from "@/lib/i18n";
 
 const PANEL_API = "https://panel-invitados.vercel.app/api/confirmar";
 const RSVP_URL = "https://xv-celeste-melgar.vercel.app";
@@ -22,16 +23,34 @@ function Corner({ pos }: { pos: "tl" | "tr" | "bl" | "br" }) {
 }
 
 export default function RSVPSection() {
+  const { lang, t } = useLang();
   const frozen = Date.now() > DEADLINE.getTime();
   const [nombrePara, setNombrePara] = useState("");
   const [pasesAsignados, setPasesAsignados] = useState(1);
   const [pasesLoaded, setPasesLoaded] = useState(false);
   const [choice, setChoice] = useState<"yes" | "no" | null>(null);
   const [nombres, setNombres] = useState<string[]>([""]);
-  const [feedback, setFeedback] = useState("");
+  type FeedbackKind =
+    | "errNoChoice"
+    | "errNoNames"
+    | "errConnection"
+    | "alreadyYes"
+    | "alreadyNo"
+    | "successYes"
+    | "successNo"
+    | null;
+  const [feedbackKind, setFeedbackKind] = useState<FeedbackKind>(null);
+  const feedback = feedbackKind ? t.rsvp[feedbackKind] : "";
   const [feedbackColor, setFeedbackColor] = useState<string>("#263e0f");
   const [loading, setLoading] = useState(false);
-  const [btnLabel, setBtnLabel] = useState(frozen ? "Fecha límite alcanzada" : "Confirmar");
+  const [btnState, setBtnState] = useState<"confirm" | "update" | "sending">("confirm");
+  const btnLabel = frozen
+    ? t.rsvp.frozenBtn
+    : btnState === "sending"
+    ? t.rsvp.sendingBtn
+    : btnState === "update"
+    ? t.rsvp.updateBtn
+    : t.rsvp.confirmBtn;
 
   // Lee parámetros del URL + guard silencioso (autoritativo desde el panel)
   useEffect(() => {
@@ -65,12 +84,8 @@ export default function RSVPSection() {
             setNombres(Array(pasesReal).fill(""));
           }
           setChoice(c);
-          setBtnLabel("Actualizar respuesta");
-          setFeedback(
-            c === "yes"
-              ? "¡Ya tienes confirmada tu asistencia! Puedes actualizar tu respuesta."
-              : "Ya tienes registrado que no podrás asistir. Puedes cambiar tu respuesta."
-          );
+          setBtnState("update");
+          setFeedbackKind(c === "yes" ? "alreadyYes" : "alreadyNo");
         } else {
           setNombres(Array(pasesReal).fill(""));
         }
@@ -81,25 +96,25 @@ export default function RSVPSection() {
 
   function handleSelect(c: "yes" | "no") {
     setChoice(c);
-    setFeedback("");
+    setFeedbackKind(null);
   }
 
   async function handleConfirm() {
     if (frozen || loading) return;
     if (!choice) {
       setFeedbackColor("#a04a2a");
-      setFeedback("Por favor selecciona si asistirás o no.");
+      setFeedbackKind("errNoChoice");
       return;
     }
     const nombresFilled = choice === "yes" ? nombres.filter((n) => n.trim()) : [];
     if (choice === "yes" && nombresFilled.length === 0) {
       setFeedbackColor("#a04a2a");
-      setFeedback("Por favor escribe al menos un nombre.");
+      setFeedbackKind("errNoNames");
       return;
     }
     setLoading(true);
-    setBtnLabel("Enviando…");
-    setFeedback("");
+    setBtnState("sending");
+    setFeedbackKind(null);
     try {
       await fetch(PANEL_API, {
         method: "POST",
@@ -112,17 +127,13 @@ export default function RSVPSection() {
           nombres_confirmados: choice === "yes" ? nombresFilled : [],
         }),
       });
-      setBtnLabel("Actualizar respuesta");
+      setBtnState("update");
       setFeedbackColor(choice === "yes" ? "#263e0f" : "#7d5720");
-      setFeedback(
-        choice === "yes"
-          ? "¡Tu asistencia ha sido confirmada! Nos vemos pronto."
-          : "Hemos registrado que no podrás asistir. ¡Gracias por avisarnos!"
-      );
+      setFeedbackKind(choice === "yes" ? "successYes" : "successNo");
     } catch {
       setFeedbackColor("#a04a2a");
-      setFeedback("Error de conexión. Intenta de nuevo.");
-      setBtnLabel("Confirmar");
+      setFeedbackKind("errConnection");
+      setBtnState("confirm");
     } finally {
       setLoading(false);
     }
@@ -184,7 +195,7 @@ export default function RSVPSection() {
             color: "#7d5720",
             marginBottom: 6,
           }}>
-            Confirmación de Asistencia
+            {t.rsvp.eyebrow}
           </p>
 
           <h2 style={{
@@ -194,7 +205,7 @@ export default function RSVPSection() {
             color: "#263e0f",
             marginBottom: 18,
           }}>
-            Tu presencia <span style={{ color: "#996515" }}>lo es</span> todo
+            {t.rsvp.presenceBefore}<span style={{ color: "#996515" }}>{t.rsvp.presenceHighlight}</span>{t.rsvp.presenceAfter}
           </h2>
 
           <p style={{
@@ -206,7 +217,7 @@ export default function RSVPSection() {
             maxWidth: 380,
             margin: "0 auto 28px",
           }}>
-            Por favor confirma tu asistencia antes del <strong style={{ color: "#263e0f" }}>3 de octubre de 2026</strong>. Nos encantaría contar contigo en este día tan especial.
+            {t.rsvp.bodyBefore}<strong style={{ color: "#263e0f" }}>{t.rsvp.bodyStrong}</strong>{t.rsvp.bodyAfter}
           </p>
 
           {/* Divisor con corazón */}
@@ -228,7 +239,7 @@ export default function RSVPSection() {
               marginBottom: 18,
               lineHeight: 1.5,
             }}>
-              Esta invitación es para {nombrePara}
+              {t.rsvp.invitationFor(nombrePara)}
             </p>
           )}
 
@@ -253,7 +264,7 @@ export default function RSVPSection() {
                 textTransform: "uppercase",
                 color: "#7d5720",
                 fontWeight: 600,
-              }}>Pases</span>
+              }}>{pasesLoaded ? pasesLabel(pasesAsignados, lang) : t.rsvp.pasesLabel}</span>
               <span style={{
                 fontFamily: "var(--font-great-vibes), cursive",
                 fontSize: 42,
@@ -276,7 +287,7 @@ export default function RSVPSection() {
                 color: choice === "yes" ? "#263e0f" : "#3a3a3a",
               }}
             >
-              Asistiré
+              {t.rsvp.yes}
             </button>
             <button
               type="button"
@@ -289,7 +300,7 @@ export default function RSVPSection() {
                 color: choice === "no" ? "#7d5720" : "#3a3a3a",
               }}
             >
-              No podré asistir
+              {t.rsvp.no}
             </button>
           </div>
 
@@ -301,7 +312,7 @@ export default function RSVPSection() {
                   key={i}
                   type="text"
                   value={n}
-                  placeholder={pasesAsignados === 1 ? "Tu nombre completo" : `Invitado ${i + 1}`}
+                  placeholder={pasesAsignados === 1 ? t.rsvp.namePlaceholderSingle : t.rsvp.namePlaceholderMulti(i + 1)}
                   maxLength={60}
                   autoComplete="off"
                   onChange={(e) => {
@@ -384,7 +395,7 @@ export default function RSVPSection() {
             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm.5 5v5.25l4.5 2.67-.75 1.23L11 13V7h1.5z" />
             </svg>
-            Fecha límite · 3 de octubre 2026
+            {t.rsvp.deadlineFooter}
           </div>
         </div>
       </div>

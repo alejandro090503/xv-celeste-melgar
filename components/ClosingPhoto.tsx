@@ -1,8 +1,10 @@
 "use client";
 import { PHOTOS } from "./photos";
+import { useLang } from "@/lib/i18n";
 
 /* Foto 3 — cierre, bosque encantado, con frase y monograma */
 export default function ClosingPhoto() {
+  const { t } = useLang();
   const hasPhoto = !!PHOTOS.closing;
 
   return (
@@ -44,7 +46,7 @@ export default function ClosingPhoto() {
         textShadow: "0 2px 12px rgba(0,0,0,0.6)",
         marginBottom: 30,
       }}>
-        Este día ha vivido en mis sueños, y su verdadera magia será estar rodeada de quienes han caminado conmigo.
+        {t.closing.text}
       </p>
 
       <div style={{

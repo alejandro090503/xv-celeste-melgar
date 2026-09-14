@@ -1,6 +1,8 @@
 "use client";
+import { useLang } from "@/lib/i18n";
 
 export default function NoNinos() {
+  const { t } = useLang();
   return (
     <section style={{ padding: "40px 26px", textAlign: "center" }}>
       <div style={{
@@ -24,7 +26,7 @@ export default function NoNinos() {
           color: "var(--text)",
           lineHeight: 1.6,
         }}>
-          Con cariño te pedimos que este sea un evento solo para adultos.
+          {t.noNinos.text}
         </p>
       </div>
     </section>

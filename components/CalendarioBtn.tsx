@@ -1,17 +1,18 @@
 "use client";
-
-const GCAL_URL = (() => {
-  const base = "https://calendar.google.com/calendar/render?action=TEMPLATE";
-  const title = encodeURIComponent("XV Años de Celeste");
-  const details = encodeURIComponent(
-    "Celebración de XV Años de Celeste Melgar · Oakland, CA"
-  );
-  const location = encodeURIComponent("Oakland, California, USA");
-  const dates = "20261017T230000Z/20261018T060000Z";
-  return `${base}&text=${title}&dates=${dates}&details=${details}&location=${location}`;
-})();
+import { useLang } from "@/lib/i18n";
 
 export default function CalendarioBtn() {
+  const { t } = useLang();
+
+  const gcalUrl = (() => {
+    const base = "https://calendar.google.com/calendar/render?action=TEMPLATE";
+    const title = encodeURIComponent(t.calendario.gcalTitle);
+    const details = encodeURIComponent(t.calendario.gcalDetails);
+    const location = encodeURIComponent("Oakland, California, USA");
+    const dates = "20261017T230000Z/20261018T060000Z";
+    return `${base}&text=${title}&dates=${dates}&details=${details}&location=${location}`;
+  })();
+
   return (
     <section style={{ padding: "40px 26px 64px", textAlign: "center" }}>
       <p style={{
@@ -20,7 +21,7 @@ export default function CalendarioBtn() {
         textTransform: "uppercase", color: "#e9c77b",
         marginBottom: 8, opacity: 0.85, fontWeight: 600,
       }}>
-        No lo olvides
+        {t.calendario.eyebrow}
       </p>
       <h2 style={{
         fontFamily: "var(--font-great-vibes), cursive",
@@ -29,16 +30,16 @@ export default function CalendarioBtn() {
         WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
         display: "inline-block",
       }}>
-        Guárdalo
+        {t.calendario.title}
       </h2>
       <p style={{
         fontFamily: "var(--font-cormorant), serif",
         fontStyle: "italic", fontWeight: 600, fontSize: 17,
         color: "var(--text-soft)", marginBottom: 20,
       }}>
-        Agrega el evento a tu calendario
+        {t.calendario.subtitle}
       </p>
-      <a href={GCAL_URL} target="_blank" rel="noopener noreferrer"
+      <a href={gcalUrl} target="_blank" rel="noopener noreferrer"
         style={{
           display: "inline-block", padding: "14px 32px",
           background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 12s ease-in-out infinite",
@@ -48,7 +49,7 @@ export default function CalendarioBtn() {
           letterSpacing: 3, textDecoration: "none",
           boxShadow: "0 4px 16px rgba(0,0,0,0.3)",
         }}>
-        Añadir a Google Calendar
+        {t.calendario.cta}
       </a>
     </section>
   );

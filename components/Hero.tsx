@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { PHOTOS } from "./photos";
+import { useLang } from "@/lib/i18n";
 
 const PARTICLES = [
   { left: "7%",  size: 4, dur: 9,  del: 0,   color: "#e9c77b" },
@@ -38,6 +39,7 @@ function OrnamentBar() {
 }
 
 export default function Hero() {
+  const { t } = useLang();
   const nameRef = useRef<HTMLHeadingElement>(null);
   const xvRef = useRef<HTMLDivElement>(null);
   const dateRef = useRef<HTMLDivElement>(null);
@@ -126,7 +128,7 @@ export default function Hero() {
           transition: "opacity 0.95s ease, transform 0.95s ease",
         }}
       >
-        Hoy comienza una nueva etapa llena de sueños, ilusiones y momentos que guardaré por siempre en mi corazón.
+        {t.hero.message}
       </p>
 
       <div style={{ position: "relative", width: "100%", textAlign: "center", overflow: "visible", padding: "0 0 4px" }}>
@@ -152,7 +154,7 @@ export default function Hero() {
             whiteSpace: "nowrap",
           }}
         >
-          Celeste
+          {t.hero.name}
         </h1>
       </div>
 
@@ -201,7 +203,7 @@ export default function Hero() {
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
             }}>
-              XV
+              {t.hero.xv}
             </div>
 
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, margin: "8px 0 10px" }}>
@@ -222,7 +224,7 @@ export default function Hero() {
               color: "#e9c77b",
               textIndent: 11,
             }}>
-              Años
+              {t.hero.years}
             </div>
           </div>
 
@@ -250,8 +252,9 @@ export default function Hero() {
               letterSpacing: 4,
               color: "#FFFFFF",
               background: "rgba(26,44,10,0.35)",
+              whiteSpace: "nowrap",
             }}>
-              17 · Octubre · 2026
+              {t.hero.date}
             </span>
           </div>
         </div>

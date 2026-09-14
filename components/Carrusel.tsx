@@ -1,18 +1,20 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useLang } from "@/lib/i18n";
 
 const BASE = "https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/img/xv-celeste-melgar";
 
-const FOTOS = [
-  { src: `${BASE}/carrusel-01.jpg`, alt: "Celeste sonriendo", pos: "center 25%" },
-  { src: `${BASE}/hero.jpg`, alt: "Celeste de espaldas, atardecer", pos: "center 30%" },
-  { src: `${BASE}/carrusel-02.jpg`, alt: "Celeste de niña", pos: "center 20%" },
-  { src: `${BASE}/framed-arco.jpg`, alt: "Celeste en el arco de piedra", pos: "center 35%" },
-  { src: `${BASE}/framed-jardin.jpg`, alt: "Celeste en el jardín de glicinas", pos: "center 30%" },
-  { src: `${BASE}/closing.jpg`, alt: "Celeste en el bosque encantado", pos: "center 30%" },
+const SRCS = [
+  `${BASE}/carrusel-01.jpg`,
+  `${BASE}/hero.jpg`,
+  `${BASE}/carrusel-02.jpg`,
+  `${BASE}/framed-arco.jpg`,
+  `${BASE}/framed-jardin.jpg`,
+  `${BASE}/closing.jpg`,
 ];
+const POS = ["center 25%", "center 30%", "center 20%", "center 35%", "center 30%", "center 30%"];
 
-const N = FOTOS.length;
+const N = SRCS.length;
 const STEP = 360 / N;
 
 // Ancho de tarjeta como fracción del contenedor (55-60% en móvil), con límites
@@ -23,6 +25,8 @@ const CARD_MAX = 236;
 const CARD_ASPECT = 3 / 4; // ancho:alto
 
 export default function Carrusel() {
+  const { t } = useLang();
+  const FOTOS = SRCS.map((src, i) => ({ src, alt: t.carrusel.alts[i], pos: POS[i] }));
   const sectionRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
@@ -285,7 +289,7 @@ export default function Carrusel() {
           marginBottom: 8,
           opacity: 0.85,
         }}>
-          Creciendo
+          {t.carrusel.eyebrow}
         </p>
         <h2 style={{
           fontFamily: "var(--font-great-vibes), cursive",
@@ -298,7 +302,7 @@ export default function Carrusel() {
           WebkitTextFillColor: "transparent",
           backgroundClip: "text",
         }}>
-          Mis Momentos
+          {t.carrusel.title}
         </h2>
       </div>
 
@@ -324,8 +328,8 @@ export default function Carrusel() {
 
       {/* Controles discretos */}
       <div style={{ display: "flex", justifyContent: "center", gap: 22, marginTop: 18 }}>
-        <button className="wheel-nav-btn" onClick={() => goStep(-1)} aria-label="Foto anterior">‹</button>
-        <button className="wheel-nav-btn" onClick={() => goStep(1)} aria-label="Foto siguiente">›</button>
+        <button className="wheel-nav-btn" onClick={() => goStep(-1)} aria-label={t.carrusel.prev}>‹</button>
+        <button className="wheel-nav-btn" onClick={() => goStep(1)} aria-label={t.carrusel.next}>›</button>
       </div>
 
       {/* Pie decorativo */}
@@ -340,7 +344,7 @@ export default function Carrusel() {
           maxWidth: 320,
           margin: "0 auto",
         }}>
-          Cada foto guarda un instante irrepetible de este camino hacia los quince.
+          {t.carrusel.footer}
         </p>
       </div>
 
@@ -360,7 +364,7 @@ export default function Carrusel() {
         >
           <button
             onClick={() => setLightbox(null)}
-            aria-label="Cerrar"
+            aria-label={t.carrusel.close}
             style={{
               position: "absolute", top: 22, right: 22,
               width: 40, height: 40, borderRadius: "50%",

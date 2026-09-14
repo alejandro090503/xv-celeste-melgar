@@ -1,4 +1,5 @@
 "use client";
+import { useLang } from "@/lib/i18n";
 
 function Block({ label, names, icon, rounded }: { label: string; names: React.ReactNode; icon: React.ReactNode; rounded: string }) {
   return (
@@ -53,6 +54,7 @@ const Amp = () => (
 );
 
 export default function Familia() {
+  const { t } = useLang();
   return (
     <section style={{ padding: "64px 26px" }}>
       <p style={{
@@ -67,7 +69,7 @@ export default function Familia() {
         marginBottom: 8,
         opacity: 0.9,
       }}>
-        Con la bendición de
+        {t.familia.eyebrow}
       </p>
       <h2 style={{
         fontFamily: "var(--font-great-vibes), cursive",
@@ -82,13 +84,13 @@ export default function Familia() {
         backgroundClip: "text",
         display: "block",
       }}>
-        Mi Familia
+        {t.familia.title}
       </h2>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 14, alignItems: "stretch" }}>
         <Block
           rounded="24px"
-          label="Mis Padres"
+          label={t.familia.padres}
           icon={
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#e0b866" strokeWidth="1.55" strokeLinecap="round" strokeLinejoin="round">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -99,13 +101,13 @@ export default function Familia() {
         />
         <Block
           rounded="24px"
-          label="Mis Padrinos"
+          label={t.familia.padrinos}
           icon={
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#e0b866" strokeWidth="1.55" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2 L13.7 8.4 L20 9 L15 13.5 L16.5 20 L12 16.5 L7.5 20 L9 13.5 L4 9 L10.3 8.4 Z" />
             </svg>
           }
-          names={<>Por confirmar</>}
+          names={<>{t.familia.porConfirmar}</>}
         />
       </div>
     </section>

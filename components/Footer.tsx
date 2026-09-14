@@ -1,6 +1,8 @@
 "use client";
+import { useLang } from "@/lib/i18n";
 
 export default function Footer() {
+  const { t } = useLang();
   return (
     <footer style={{ padding: "40px 20px 50px", textAlign: "center" }}>
       <div style={{
@@ -9,7 +11,7 @@ export default function Footer() {
         letterSpacing: 4, textTransform: "uppercase",
         color: "#e9c77b", marginBottom: 14, opacity: 0.85,
       }}>
-        XVII · Octubre · MMXXVI
+        {t.footer.date}
       </div>
       <div style={{ width: 48, height: 1, margin: "0 auto 16px",
         background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 10s ease-in-out infinite 4.1s", opacity: 0.4 }} />
@@ -17,7 +19,7 @@ export default function Footer() {
         fontFamily: "var(--font-cormorant), serif",
         fontStyle: "italic", fontSize: 14, color: "var(--text-soft)", letterSpacing: 1,
       }}>
-        Con mucho cariño por{" "}
+        {t.footer.credit}{" "}
         <a href="https://www.instagram.com/elysium.invitaciones" target="_blank" rel="noopener noreferrer"
           style={{ color: "#e9c77b", textDecoration: "none" }}>
           @elysium.invitaciones

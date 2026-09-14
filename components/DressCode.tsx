@@ -1,8 +1,10 @@
 "use client";
+import { useLang } from "@/lib/i18n";
 
 const COUPLE_IMG = "https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/img/xv-julia-sofia/dresscode-pareja.png";
 
 export default function DressCode() {
+  const { t } = useLang();
   return (
     <section style={{ padding: "64px 26px", textAlign: "center" }}>
       <p style={{
@@ -16,7 +18,7 @@ export default function DressCode() {
         marginBottom: 4,
         opacity: 0.9,
       }}>
-        Código de Vestimenta
+        {t.dresscode.eyebrow}
       </p>
       <h2 style={{
         fontFamily: "var(--font-great-vibes), cursive",
@@ -30,13 +32,13 @@ export default function DressCode() {
         WebkitTextFillColor: "transparent",
         backgroundClip: "text",
       }}>
-        Dress Code
+        {t.dresscode.title}
       </h2>
 
       <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
         <img
           src={COUPLE_IMG}
-          alt="Pareja en código de vestimenta etiqueta — esmoquin y vestido largo"
+          alt={t.dresscode.alt}
           loading="lazy"
           style={{
             width: 210,
@@ -56,7 +58,7 @@ export default function DressCode() {
         color: "#e9c77b",
         marginBottom: 36,
       }}>
-        Formal
+        {t.dresscode.formal}
       </p>
 
       {/* Notas — color a evitar */}
@@ -79,7 +81,7 @@ export default function DressCode() {
           lineHeight: 1.6,
           marginBottom: 26,
         }}>
-          No sudaderas con capucha.
+          {t.dresscode.noHoodies}
         </p>
 
         {/* Evitar verde esmeralda / cualquier tono de verde */}
@@ -107,7 +109,7 @@ export default function DressCode() {
             color: "var(--text)", letterSpacing: 0.3, lineHeight: 1.6,
             marginBottom: 10,
           }}>
-            No usar verde esmeralda ni ningún tono de verde.
+            {t.dresscode.noGreen}
           </p>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <div style={{

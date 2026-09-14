@@ -15,12 +15,15 @@ import Carrusel from "./Carrusel";
 import ClosingPhoto from "./ClosingPhoto";
 import Footer from "./Footer";
 import MusicFab, { type MusicFabHandle } from "./MusicFab";
+import LangFab from "./LangFab";
 import GoldDust from "./GoldDust";
 import ScrollReveal from "./ScrollReveal";
 import NoNinos from "./NoNinos";
 import AlbumQR from "./AlbumQR";
+import { useLang } from "@/lib/i18n";
 
 export default function InvitacionClient() {
+  const { t } = useLang();
   const [contentVisible, setContentVisible] = useState(false);
   const [splashMounted, setSplashMounted] = useState(true);
   const musicRef = useRef<MusicFabHandle>(null);
@@ -80,17 +83,18 @@ export default function InvitacionClient() {
         </ScrollReveal>
 
         <ScrollReveal>
-          <div style={{ padding: "32px 26px 10px", textAlign: "center" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 18 }}>
-              <div style={{ flex: 1, maxWidth: 60, height: 1, background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 10.5s ease-in-out infinite 2.7s", opacity: 0.55 }} />
+          <div style={{ padding: "32px 18px 10px", textAlign: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "clamp(8px, 3vw, 18px)" }}>
+              <div style={{ flex: 1, maxWidth: 40, height: 1, background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 10.5s ease-in-out infinite 2.7s", opacity: 0.55 }} />
               <div style={{
                 fontFamily: "var(--font-cormorant), serif",
-                fontWeight: 700, fontSize: 24, letterSpacing: 8,
-                textTransform: "uppercase", color: "#e9c77b", textIndent: 8,
+                fontWeight: 700, fontSize: "clamp(15px, 4.8vw, 24px)", letterSpacing: "clamp(2px, 1.2vw, 8px)",
+                textTransform: "uppercase", color: "#e9c77b",
+                whiteSpace: "nowrap",
               }}>
-                17 · Octubre · 2026
+                {t.hero.date}
               </div>
-              <div style={{ flex: 1, maxWidth: 60, height: 1, background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 10.5s ease-in-out infinite 2.7s", opacity: 0.55 }} />
+              <div style={{ flex: 1, maxWidth: 40, height: 1, background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 10.5s ease-in-out infinite 2.7s", opacity: 0.55 }} />
             </div>
           </div>
         </ScrollReveal>
@@ -158,6 +162,7 @@ export default function InvitacionClient() {
       {contentVisible && <GoldDust />}
 
       <MusicFab ref={musicRef} />
+      <LangFab />
     </>
   );
 }

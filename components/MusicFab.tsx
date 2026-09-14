@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from "react";
+import { useLang } from "@/lib/i18n";
 
 const AUDIO_URL = "https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/audio/xv-celeste-melgar/cancion.mp3";
 
@@ -8,6 +9,7 @@ export interface MusicFabHandle {
 }
 
 const MusicFab = forwardRef<MusicFabHandle>((_, ref) => {
+  const { t } = useLang();
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -81,7 +83,7 @@ const MusicFab = forwardRef<MusicFabHandle>((_, ref) => {
 
       <button
         onClick={toggle}
-        aria-label={playing ? "Pausar música" : "Reproducir música"}
+        aria-label={playing ? t.music.pause : t.music.play}
         style={{
           position: "relative", width: "100%", height: "100%",
           borderRadius: "50%", border: "none", cursor: "pointer",

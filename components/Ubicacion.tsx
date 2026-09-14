@@ -1,4 +1,5 @@
 "use client";
+import { useLang } from "@/lib/i18n";
 
 interface VenueProps {
   type: string;
@@ -11,6 +12,7 @@ interface VenueProps {
 }
 
 function VenueCard({ type, name, address, time, mapsUrl, lat, lng }: VenueProps) {
+  const { lang, t } = useLang();
   return (
     <div style={{
       position: "relative",
@@ -40,7 +42,8 @@ function VenueCard({ type, name, address, time, mapsUrl, lat, lng }: VenueProps)
 
         <div style={{
           fontFamily: "var(--font-great-vibes), cursive",
-          fontSize: 42, color: "#e9c77b", lineHeight: 1.15, marginBottom: 10,
+          fontSize: "clamp(28px, 8vw, 42px)", color: "#e9c77b", lineHeight: 1.2, marginBottom: 10,
+          padding: "0 6px",
         }}>
           {type}
         </div>
@@ -85,7 +88,7 @@ function VenueCard({ type, name, address, time, mapsUrl, lat, lng }: VenueProps)
               letterSpacing: 3, textDecoration: "none",
               boxShadow: "0 4px 16px rgba(0,0,0,0.3)",
             }}>
-            Cómo Llegar
+            {t.ubicacion.comoLlegar}
           </a>
         </div>
       )}
@@ -94,9 +97,9 @@ function VenueCard({ type, name, address, time, mapsUrl, lat, lng }: VenueProps)
         <iframe
           style={{ width: "100%", height: 215, border: 0, display: "block",
             borderRadius: "0 0 28px 28px", opacity: 0.92 }}
-          src={`https://maps.google.com/maps?q=${lat},${lng}&output=embed&hl=es&z=16`}
+          src={`https://maps.google.com/maps?q=${lat},${lng}&output=embed&hl=${lang}&z=16`}
           allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"
-          title={`Ubicación — ${type}`}
+          title={t.ubicacion.tituloIframe(type)}
         />
       ) : (
         <div style={{ height: 26 }} />
@@ -106,6 +109,7 @@ function VenueCard({ type, name, address, time, mapsUrl, lat, lng }: VenueProps)
 }
 
 export default function Ubicacion() {
+  const { t } = useLang();
   return (
     <section style={{ padding: "64px 26px" }}>
       <p style={{
@@ -114,7 +118,7 @@ export default function Ubicacion() {
         textTransform: "uppercase", color: "#e9c77b",
         textAlign: "center", marginBottom: 8, opacity: 0.9, fontWeight: 600,
       }}>
-        Te esperamos en
+        {t.ubicacion.eyebrow}
       </p>
       <h2 style={{
         fontFamily: "var(--font-great-vibes), cursive",
@@ -122,12 +126,12 @@ export default function Ubicacion() {
         background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 12.2s ease-in-out infinite",
         WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
       }}>
-        Lugares
+        {t.ubicacion.title}
       </h2>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         <VenueCard
-          type="Servicio de Acción de Gracias"
+          type={t.ubicacion.servicio}
           name="1415 Broadway"
           address="1415 Broadway, Alameda, CA 94501"
           time="4:00 PM"
@@ -136,9 +140,9 @@ export default function Ubicacion() {
           lng={-122.2469}
         />
         <VenueCard
-          type="Recepción"
-          name="Por confirmar"
-          address="Por confirmar"
+          type={t.ubicacion.recepcion}
+          name={t.ubicacion.porConfirmar}
+          address={t.ubicacion.porConfirmar}
           time="6:00 PM"
           mapsUrl=""
           lat={37.8044}

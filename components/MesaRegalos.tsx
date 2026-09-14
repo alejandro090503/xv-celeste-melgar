@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useLang } from "@/lib/i18n";
 
 function EnvelopeRainItem({ style }: { style: React.CSSProperties }) {
   return (
@@ -11,6 +12,7 @@ function EnvelopeRainItem({ style }: { style: React.CSSProperties }) {
 }
 
 export default function MesaRegalos() {
+  const { t } = useLang();
   const [open, setOpen] = useState(false);
   const [raining, setRaining] = useState(true);
   const [landed, setLanded] = useState(false);
@@ -129,7 +131,7 @@ export default function MesaRegalos() {
           marginBottom: 8,
           opacity: 0.9,
         }}>
-          Obsequios
+          {t.regalos.eyebrow}
         </p>
         <h2 style={{
           fontFamily: "var(--font-great-vibes), cursive",
@@ -143,7 +145,7 @@ export default function MesaRegalos() {
           backgroundClip: "text",
           display: "inline-block",
         }}>
-          Mesa de Regalos
+          {t.regalos.title}
         </h2>
 
         <p style={{
@@ -157,7 +159,7 @@ export default function MesaRegalos() {
           maxWidth: 360,
           margin: "0 auto 24px",
         }}>
-          Tu cariño y presencia son el mejor regalo que puedo recibir. Si deseas obsequiarme algo, será con mucho gusto recibido.
+          {t.regalos.body}
         </p>
 
         {/* Sobre interactivo — aterriza cuando termina la lluvia */}
@@ -171,7 +173,7 @@ export default function MesaRegalos() {
         }}>
           <button
             onClick={() => setOpen((o) => !o)}
-            aria-label="Sobre — toca para abrir"
+            aria-label={t.regalos.ariaSobre}
             aria-expanded={open}
             style={{
               display: "flex", flexDirection: "column", alignItems: "center",
@@ -261,7 +263,7 @@ export default function MesaRegalos() {
                 color: "#e9c77b",
                 lineHeight: 1.2,
               }}>
-                Lluvia de Sobres
+                {t.regalos.lluvia}
               </p>
               <p style={{
                 fontFamily: "var(--font-cormorant), serif",
@@ -271,7 +273,7 @@ export default function MesaRegalos() {
                 color: "var(--text-soft)",
                 lineHeight: 1.7,
               }}>
-                Un sobre con tu bendición llenará mi corazón de alegría.
+                {t.regalos.lluviaBody}
               </p>
             </div>
           </button>
@@ -286,7 +288,7 @@ export default function MesaRegalos() {
             transition: "opacity .3s",
             marginTop: 8,
           }}>
-            Toca el sobre
+            {t.regalos.tocaSobre}
           </p>
         </div>
       </div>

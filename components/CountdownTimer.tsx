@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useLang } from "@/lib/i18n";
 
 const TARGET = new Date("2026-10-17T16:00:00-07:00");
 
@@ -110,6 +111,7 @@ function FlipUnit({ value, label }: { value: string; label: string }) {
 }
 
 export default function CountdownTimer() {
+  const { t } = useLang();
   const [time, setTime] = useState(getRemainingTime());
 
   useEffect(() => {
@@ -125,14 +127,14 @@ export default function CountdownTimer() {
         background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 10s ease-in-out infinite",
         WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
       }}>
-        Faltan
+        {t.countdown.title}
       </h2>
       <p style={{
         fontFamily: "var(--font-cormorant), serif",
         fontStyle: "italic", fontSize: 16, color: "var(--text-soft)",
         textAlign: "center", letterSpacing: 1, marginBottom: 34, fontWeight: 600,
       }}>
-        Para este día tan especial
+        {t.countdown.subtitle}
       </p>
 
       <div style={{
@@ -142,10 +144,10 @@ export default function CountdownTimer() {
         maxWidth: 380,
         margin: "0 auto",
       }}>
-        <FlipUnit value={time.days} label="Días" />
-        <FlipUnit value={time.hours} label="Horas" />
-        <FlipUnit value={time.minutes} label="Min" />
-        <FlipUnit value={time.seconds} label="Seg" />
+        <FlipUnit value={time.days} label={t.countdown.days} />
+        <FlipUnit value={time.hours} label={t.countdown.hours} />
+        <FlipUnit value={time.minutes} label={t.countdown.minutes} />
+        <FlipUnit value={time.seconds} label={t.countdown.seconds} />
       </div>
 
       <p style={{
@@ -154,7 +156,7 @@ export default function CountdownTimer() {
         textAlign: "center", letterSpacing: 1, lineHeight: 1.6,
         marginTop: 34, fontWeight: 500, opacity: 0.85,
       }}>
-        Cada segundo más cerca de celebrar juntos
+        {t.countdown.footer}
       </p>
     </section>
   );

@@ -1,9 +1,11 @@
 "use client";
+import { useLang } from "@/lib/i18n";
 
 const ALBUM_URL = "https://photos.app.goo.gl/PENDIENTE";
 const QR_IMG = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&color=1a2c0a&bgcolor=FFFFFF&data=${encodeURIComponent(ALBUM_URL)}`;
 
 export default function AlbumQR() {
+  const { t } = useLang();
   return (
     <section style={{ padding: "64px 26px", textAlign: "center" }}>
       <p style={{
@@ -17,7 +19,7 @@ export default function AlbumQR() {
         marginBottom: 8,
         opacity: 0.9,
       }}>
-        Comparte tus fotos
+        {t.album.eyebrow}
       </p>
       <h2 style={{
         fontFamily: "var(--font-great-vibes), cursive",
@@ -31,7 +33,7 @@ export default function AlbumQR() {
         WebkitTextFillColor: "transparent",
         backgroundClip: "text",
       }}>
-        Álbum Compartido
+        {t.album.title}
       </h2>
       <p style={{
         fontFamily: "var(--font-cormorant), serif",
@@ -43,7 +45,7 @@ export default function AlbumQR() {
         maxWidth: 340,
         margin: "0 auto 26px",
       }}>
-        Escanea el código y súbenos las fotos que tomes durante la celebración.
+        {t.album.body}
       </p>
       <div style={{
         position: "relative",
@@ -54,7 +56,7 @@ export default function AlbumQR() {
         boxShadow: "0 12px 32px rgba(0,0,0,0.35)",
       }}>
         <span className="gold-border" aria-hidden="true" style={{ padding: 2, borderRadius: 18 }} />
-        <img src={QR_IMG} alt="Código QR del álbum compartido" width={180} height={180} loading="lazy" style={{ display: "block" }} />
+        <img src={QR_IMG} alt={t.album.alt} width={180} height={180} loading="lazy" style={{ display: "block" }} />
       </div>
     </section>
   );

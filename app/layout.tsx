@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Great_Vibes, Cormorant_Garamond, Lato } from "next/font/google";
+import { LangProvider } from "@/lib/i18n";
 import "./globals.css";
 
 const greatVibes = Great_Vibes({
@@ -46,7 +47,7 @@ export default function RootLayout({
       <body
         className={`${greatVibes.variable} ${cormorant.variable} ${lato.variable}`}
       >
-        {children}
+        <LangProvider>{children}</LangProvider>
       </body>
     </html>
   );
