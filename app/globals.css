@@ -96,7 +96,7 @@ body {
     #fff4d6 332deg,
     #d4a24c 346deg,
     rgba(212,162,76,0) 360deg);
-  animation: beamSpin 4.5s linear infinite;
+  animation: beamSpin 9s linear infinite;
 }
 @keyframes beamSpin {
   to { transform: translate(-50%, -50%) rotate(360deg); }
@@ -115,68 +115,127 @@ body {
   transform: translateY(0);
 }
 
-/* ===== Oro metálico real con brillo lento (goldSweep) ===== */
+/* ===== Oro metálico premium — brillo lento, destello angosto, pausa larga ===== */
+/* 0%→60% el destello recorre el texto; 60%→100% queda quieto (pausa elegante) */
 @keyframes goldSweep {
-  0%   { background-position: 200% center; }
-  100% { background-position: -200% center; }
+  0%   { background-position: 220% center; }
+  60%  { background-position: -220% center; }
+  100% { background-position: -220% center; }
 }
 
 @keyframes goldGlow {
-  0%   { filter: drop-shadow(0 0 2px rgba(241,213,143,0.4)) brightness(1); }
-  100% { filter: drop-shadow(0 0 8px rgba(255,243,207,0.85)) brightness(1.25); }
+  0%   { filter: drop-shadow(0 0 2px rgba(241,213,143,0.35)) brightness(1); }
+  50%  { filter: drop-shadow(0 0 7px rgba(255,243,207,0.75)) brightness(1.18); }
+  100% { filter: drop-shadow(0 0 2px rgba(241,213,143,0.35)) brightness(1); }
+}
+
+/* Recorrido del borde — lento, no sincronizado (usado por .gold-border) */
+@keyframes goldBorderSweep {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 :root {
+  --gold-dur: 11s;
+  --gold-delay: 0s;
+
+  /* Base cálida amplia + destello angosto #fff3cf que pasa y se pierde */
   --gold-metal-gradient: linear-gradient(
     100deg,
-    #5e3d0c 0%,
-    #996515 10%,
-    #c8913a 20%,
-    #e9c77b 30%,
-    #FFF3CF 40%,
-    #e9c77b 50%,
-    #c8913a 60%,
-    #996515 70%,
-    #7a5212 78%,
-    #b8862f 86%,
-    #f1d58f 94%,
-    #996515 100%
+    #7a5212 0%,
+    #b8862f 16%,
+    #d9a94f 30%,
+    #b8862f 40%,
+    #ecd18d 47%,
+    #fff3cf 50%,
+    #ecd18d 53%,
+    #b8862f 60%,
+    #d9a94f 70%,
+    #b8862f 84%,
+    #7a5212 100%
+  );
+
+  /* Variante suave para labels/subtítulos: pico más opaco, menos contraste */
+  --gold-metal-gradient-soft: linear-gradient(
+    100deg,
+    #7d5c22 0%,
+    #b8862f 20%,
+    #cf9e48 40%,
+    #e3c179 49%,
+    #f1d58f 50%,
+    #e3c179 51%,
+    #cf9e48 60%,
+    #b8862f 80%,
+    #7d5c22 100%
   );
 }
 
 .gold-text {
   background-image: var(--gold-metal-gradient);
-  background-size: 300% 100%;
+  background-size: 400% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: goldSweep 6s linear infinite;
-  filter: drop-shadow(0 0 6px rgba(233,199,123,0.35)) drop-shadow(0 2px 2px rgba(0,0,0,0.45));
-  padding-left: .34em;
-  padding-right: .34em;
-  margin-left: -.34em;
-  margin-right: -.34em;
+  animation: goldSweep var(--gold-dur, 11s) ease-in-out infinite;
+  animation-delay: var(--gold-delay, 0s);
+  filter: drop-shadow(0 0 6px rgba(233,199,123,0.3)) drop-shadow(0 2px 2px rgba(0,0,0,0.45));
+  padding: .18em .34em;
+  margin: -.18em -.34em;
+  display: inline-block;
+}
+
+/* Labels / subtítulos pequeños — brillo más opaco y aún más lento */
+.gold-text--soft {
+  background-image: var(--gold-metal-gradient-soft);
+  background-size: 400% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: goldSweep 14s ease-in-out infinite;
+  animation-delay: var(--gold-delay, 0s);
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+  padding: .16em .3em;
+  margin: -.16em -.3em;
+  display: inline-block;
+}
+
+/* Script grande (Celeste, Mis Momentos, Faltan…) — lento con delay propio */
+.gold-text--slow {
+  background-image: var(--gold-metal-gradient);
+  background-size: 400% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: goldSweep 13s ease-in-out infinite;
+  animation-delay: var(--gold-delay, 1.3s);
+  filter: drop-shadow(0 0 7px rgba(233,199,123,0.32)) drop-shadow(0 2px 2px rgba(0,0,0,0.45));
+  padding: .2em .34em;
+  margin: -.2em -.34em;
+  display: inline-block;
 }
 
 .gold-fill {
   background-image: var(--gold-metal-gradient);
-  background-size: 300% 100%;
-  animation: goldSweep 6s linear infinite;
+  background-size: 400% 100%;
+  animation: goldSweep 10s ease-in-out infinite;
+  animation-delay: var(--gold-delay, 0s);
   color: #1a2c0a;
 }
 
 .gold-glow {
-  animation: goldGlow 4s ease-in-out infinite alternate;
+  animation: goldGlow 7s ease-in-out infinite;
+  animation-delay: var(--gold-delay, 0s);
 }
 
 .gold-line {
   background-image: var(--gold-metal-gradient);
-  background-size: 300% 100%;
-  animation: goldSweep 6s linear infinite;
+  background-size: 400% 100%;
+  animation: goldSweep 10s ease-in-out infinite;
+  animation-delay: var(--gold-delay, 0s);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gold-text, .gold-fill, .gold-line {
+  .gold-text, .gold-text--soft, .gold-text--slow, .gold-fill, .gold-line {
     animation: none;
     background-position: 50% center;
   }
@@ -184,4 +243,63 @@ body {
     animation: none;
     filter: drop-shadow(0 0 4px rgba(241,213,143,0.5));
   }
+  .gold-border::before, .gold-border::after {
+    animation: none !important;
+  }
+}
+
+/* ===== .gold-border — borde metálico animado, compatible con backdrop-filter =====
+   Uso: contenedor con position:relative + <span className="gold-border" />
+   como primer hijo (o ::before si el elemento no usa ya un ::before). */
+.gold-border {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  z-index: 2;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  overflow: hidden;
+}
+.gold-border::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 260%;
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(from 0deg,
+    rgba(153,101,21,0) 0deg,
+    rgba(153,101,21,0) 220deg,
+    rgba(153,101,21,0.45) 285deg,
+    #fff3cf 322deg,
+    #d9a94f 340deg,
+    rgba(153,101,21,0) 360deg);
+  animation: beamSpin var(--gold-dur, 9s) linear infinite;
+  animation-delay: var(--gold-delay, 0s);
+}
+.gold-border--soft::before {
+  background: conic-gradient(from 0deg,
+    rgba(153,101,21,0) 0deg,
+    rgba(153,101,21,0) 230deg,
+    rgba(153,101,21,0.3) 288deg,
+    #f1d58f 320deg,
+    #cf9e48 340deg,
+    rgba(153,101,21,0) 360deg);
+}
+.gold-border--slow::before {
+  animation-duration: 14s;
+}
+.gold-border--thin {
+  padding: 0.5px;
+}
+
+/* ===== Legibilidad — background-clip:text sin recortar rasgos ===== */
+[style*="WebkitBackgroundClip"],
+.gold-text, .gold-text--soft, .gold-text--slow {
+  overflow: visible;
 }

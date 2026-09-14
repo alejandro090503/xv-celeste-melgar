@@ -22,9 +22,11 @@ export default function AlbumQR() {
       <h2 style={{
         fontFamily: "var(--font-great-vibes), cursive",
         fontSize: 50,
-        lineHeight: 1.1,
+        lineHeight: 1.25,
         marginBottom: 18,
-        background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite",
+        padding: "6px 24px 10px",
+        display: "inline-block",
+        background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 11s ease-in-out infinite",
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
         backgroundClip: "text",
@@ -44,12 +46,14 @@ export default function AlbumQR() {
         Escanea el código y súbenos las fotos que tomes durante la celebración.
       </p>
       <div style={{
+        position: "relative",
         display: "inline-block",
         padding: 14,
         background: "#FFFFFF",
         borderRadius: 18,
         boxShadow: "0 12px 32px rgba(0,0,0,0.35)",
       }}>
+        <span className="gold-border" aria-hidden="true" style={{ padding: 2, borderRadius: 18 }} />
         <img src={QR_IMG} alt="Código QR del álbum compartido" width={180} height={180} loading="lazy" style={{ display: "block" }} />
       </div>
     </section>

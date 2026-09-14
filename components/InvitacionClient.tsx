@@ -82,7 +82,7 @@ export default function InvitacionClient() {
         <ScrollReveal>
           <div style={{ padding: "32px 26px 10px", textAlign: "center" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 18 }}>
-              <div style={{ flex: 1, maxWidth: 60, height: 1, background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite", opacity: 0.55 }} />
+              <div style={{ flex: 1, maxWidth: 60, height: 1, background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 10.5s ease-in-out infinite 2.7s", opacity: 0.55 }} />
               <div style={{
                 fontFamily: "var(--font-cormorant), serif",
                 fontWeight: 700, fontSize: 24, letterSpacing: 8,
@@ -90,7 +90,7 @@ export default function InvitacionClient() {
               }}>
                 17 · Octubre · 2026
               </div>
-              <div style={{ flex: 1, maxWidth: 60, height: 1, background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite", opacity: 0.55 }} />
+              <div style={{ flex: 1, maxWidth: 60, height: 1, background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 10.5s ease-in-out infinite 2.7s", opacity: 0.55 }} />
             </div>
           </div>
         </ScrollReveal>

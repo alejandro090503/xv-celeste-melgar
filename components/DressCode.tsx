@@ -21,9 +21,11 @@ export default function DressCode() {
       <h2 style={{
         fontFamily: "var(--font-great-vibes), cursive",
         fontSize: 52,
-        lineHeight: 1.1,
+        lineHeight: 1.25,
         marginBottom: 18,
-        background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite",
+        padding: "6px 24px 10px",
+        display: "inline-block",
+        background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 13s ease-in-out infinite 2.1s",
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
         backgroundClip: "text",
@@ -59,6 +61,7 @@ export default function DressCode() {
 
       {/* Notas — color a evitar */}
       <div style={{
+        position: "relative",
         maxWidth: 360,
         margin: "0 auto",
         padding: "30px 24px",
@@ -66,6 +69,7 @@ export default function DressCode() {
         border: "1px solid rgba(212,162,76,0.30)",
         borderRadius: 22,
       }}>
+        <span className="gold-border gold-border--soft" aria-hidden="true" />
         <p style={{
           fontFamily: "var(--font-cormorant), serif",
           fontWeight: 500,

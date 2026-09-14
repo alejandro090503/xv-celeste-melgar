@@ -56,6 +56,7 @@ function FlipUnit({ value, label }: { value: string; label: string }) {
         justifyContent: "center",
         perspective: 360,
       }}>
+        <span className="gold-border gold-border--thin" aria-hidden="true" />
         {/* Línea de pliegue central */}
         <div style={{
           position: "absolute", top: "50%", left: 0, right: 0,
@@ -79,8 +80,8 @@ function FlipUnit({ value, label }: { value: string; label: string }) {
           letterSpacing: "-1px",
           fontVariantNumeric: "tabular-nums",
           background: "var(--gold-metal-gradient)",
-          backgroundSize: "300% 100%",
-          animation: "goldSweep 6s linear infinite",
+          backgroundSize: "400% 100%",
+          animation: "goldSweep 10s ease-in-out infinite",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
           backgroundClip: "text",
@@ -120,8 +121,8 @@ export default function CountdownTimer() {
     <section style={{ padding: "64px 26px" }}>
       <h2 style={{
         fontFamily: "var(--font-great-vibes), cursive",
-        fontSize: 50, textAlign: "center", lineHeight: 1.1, marginBottom: 8,
-        background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite",
+        fontSize: 50, textAlign: "center", lineHeight: 1.25, marginBottom: 8, padding: "6px 24px 10px", display: "inline-block", width: "100%",
+        background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 10s ease-in-out infinite",
         WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
       }}>
         Faltan

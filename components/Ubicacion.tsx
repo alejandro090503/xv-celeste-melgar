@@ -70,7 +70,7 @@ function VenueCard({ type, name, address, time, mapsUrl, lat, lng }: VenueProps)
         </div>
 
         <div style={{ width: 48, height: 1, margin: "18px auto 22px",
-          background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite", opacity: 0.4 }} />
+          background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 12.2s ease-in-out infinite", opacity: 0.4 }} />
       </div>
 
       {mapsUrl && (
@@ -78,7 +78,7 @@ function VenueCard({ type, name, address, time, mapsUrl, lat, lng }: VenueProps)
           <a href={mapsUrl} target="_blank" rel="noopener noreferrer"
             style={{
               display: "inline-block", marginTop: 8, padding: "14px 32px",
-              background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite",
+              background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 12.2s ease-in-out infinite",
               color: "#1a2c0a", borderRadius: 30,
               fontFamily: "var(--font-lato), sans-serif",
               fontSize: 14, fontWeight: 800, textTransform: "uppercase",
@@ -118,8 +118,8 @@ export default function Ubicacion() {
       </p>
       <h2 style={{
         fontFamily: "var(--font-great-vibes), cursive",
-        fontSize: 50, textAlign: "center", lineHeight: 1.1, marginBottom: 30,
-        background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite",
+        fontSize: 50, textAlign: "center", lineHeight: 1.25, marginBottom: 30, padding: "6px 24px 10px", display: "inline-block", width: "100%",
+        background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 12.2s ease-in-out infinite",
         WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
       }}>
         Lugares

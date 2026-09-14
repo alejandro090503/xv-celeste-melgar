@@ -3,6 +3,7 @@
 function Block({ label, names, icon, rounded }: { label: string; names: React.ReactNode; icon: React.ReactNode; rounded: string }) {
   return (
     <div style={{
+      position: "relative",
       width: "100%",
       textAlign: "center",
       padding: "30px 26px",
@@ -12,6 +13,7 @@ function Block({ label, names, icon, rounded }: { label: string; names: React.Re
       border: "1px solid rgba(212,162,76,0.22)",
       borderRadius: rounded,
     }}>
+      <span className="gold-border gold-border--soft" aria-hidden="true" />
       <div style={{
         width: 52, height: 52, borderRadius: "50%",
         margin: "0 auto 14px",
@@ -74,7 +76,7 @@ export default function Familia() {
         lineHeight: 1.25,
         marginBottom: 30,
         padding: "6px 24px 10px",
-        background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite",
+        background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 12.8s ease-in-out infinite 1.7s",
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
         backgroundClip: "text",

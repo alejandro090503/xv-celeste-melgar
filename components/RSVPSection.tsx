@@ -157,6 +157,7 @@ export default function RSVPSection() {
         padding: "52px 28px 44px",
         boxShadow: "0 24px 64px rgba(0,0,0,0.28)",
       }}>
+        <span className="gold-border gold-border--soft" aria-hidden="true" />
         <div style={{ position: "absolute", inset: 10, border: "1px solid rgba(194,143,69,0.22)", pointerEvents: "none" }} />
         <Corner pos="tl" /><Corner pos="tr" /><Corner pos="bl" /><Corner pos="br" />
 

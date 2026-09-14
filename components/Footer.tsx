@@ -12,7 +12,7 @@ export default function Footer() {
         XVII · Octubre · MMXXVI
       </div>
       <div style={{ width: 48, height: 1, margin: "0 auto 16px",
-        background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite", opacity: 0.4 }} />
+        background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 10s ease-in-out infinite 4.1s", opacity: 0.4 }} />
       <p style={{
         fontFamily: "var(--font-cormorant), serif",
         fontStyle: "italic", fontSize: 14, color: "var(--text-soft)", letterSpacing: 1,

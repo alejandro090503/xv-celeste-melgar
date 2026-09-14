@@ -54,7 +54,7 @@ export default function ClosingPhoto() {
         lineHeight: 1.25,
         padding: "0 30px",
         overflow: "visible",
-        background: "var(--gold-metal-gradient)", backgroundSize: "300% 100%", animation: "goldSweep 6s linear infinite",
+        background: "var(--gold-metal-gradient)", backgroundSize: "400% 100%", animation: "goldSweep 11.5s ease-in-out infinite .8s",
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
         backgroundClip: "text",

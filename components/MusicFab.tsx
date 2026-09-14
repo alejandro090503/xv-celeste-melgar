@@ -50,6 +50,7 @@ const MusicFab = forwardRef<MusicFabHandle>((_, ref) => {
         animation: playing ? "vinylPulse 2.2s ease-in-out infinite" : undefined,
         pointerEvents: "none",
       }} />
+      <span className="gold-border" aria-hidden="true" style={{ borderRadius: "50%" }} />
 
       <div style={{
         position: "absolute", top: -4, right: -2,
