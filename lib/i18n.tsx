@@ -46,6 +46,8 @@ const dict = {
       servicio: "Servicio de Acción de Gracias",
       recepcion: "Recepción",
       comoLlegar: "Cómo Llegar",
+      parkingEyebrow: "Aviso importante",
+      parkingText: "Estacionamiento en la calle solamente",
       tituloIframe: (type: string) => `Ubicación — ${type}`,
     },
     calendario: {
@@ -169,6 +171,8 @@ const dict = {
       servicio: "Thanksgiving Service",
       recepcion: "Reception",
       comoLlegar: "Get Directions",
+      parkingEyebrow: "Please note",
+      parkingText: "Street parking only",
       tituloIframe: (type: string) => `Location — ${type}`,
     },
     calendario: {

@@ -149,6 +149,46 @@ export default function Ubicacion() {
           lng={-122.2469}
         />
       </div>
+
+      {/* Aviso de estacionamiento */}
+      <div style={{
+        position: "relative", marginTop: 28, padding: "26px 22px 24px",
+        border: "1px solid rgba(212,162,76,0.28)",
+        borderRadius: 22, textAlign: "center",
+        background: "rgba(26,44,10,0.55)",
+        backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
+        boxShadow: "0 12px 34px rgba(0,0,0,0.28)",
+      }}>
+        <span className="gold-border gold-border--soft" aria-hidden="true" />
+        <div className="gold-glow" style={{
+          width: 58, height: 58, borderRadius: "50%", margin: "0 auto 14px",
+          background: "rgba(212,162,76,0.12)", border: "1.5px solid rgba(212,162,76,0.45)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#e0b866" aria-hidden="true">
+            <path d="M13 3H6v18h4v-6h3c3.31 0 6-2.69 6-6s-2.69-6-6-6zm.2 8H10V7h3.2c1.1 0 2 .9 2 2s-.9 2-2 2z" />
+          </svg>
+        </div>
+        <p style={{
+          fontFamily: "var(--font-cormorant), serif", fontStyle: "italic", fontWeight: 700,
+          fontSize: 14, letterSpacing: 4, textTransform: "uppercase", color: "#e9c77b", marginBottom: 8,
+        }}>
+          {t.ubicacion.parkingEyebrow}
+        </p>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, margin: "0 0 12px" }} aria-hidden="true">
+          <span style={{ width: 34, height: 1, background: "linear-gradient(90deg, transparent, rgba(224,184,102,0.7))" }} />
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#e0b866">
+            <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z" />
+          </svg>
+          <span style={{ width: 34, height: 1, background: "linear-gradient(90deg, rgba(224,184,102,0.7), transparent)" }} />
+        </div>
+        <p style={{
+          fontFamily: "var(--font-cormorant), serif", fontWeight: 700,
+          fontSize: 21, lineHeight: 1.4, color: "#ffffff",
+        }}>
+          {t.ubicacion.parkingText}
+        </p>
+      </div>
     </section>
   );
 }
