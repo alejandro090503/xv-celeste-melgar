@@ -12,8 +12,8 @@ type Status = { msg: (r: Dict["rsvp"]) => string; err: boolean } | null;
 
 // WhatsApp y Messenger cortan la URL en el primer espacio o "&". El panel manda
 // un token base64url en ?i= con "nombre|pases|menores" que llega intacto.
-// Se conserva ?para=&pases= por compatibilidad.
-function leerInvitacion(): { para: string; pases: number } {
+// Se conserva ?para= por compatibilidad.
+function leerInvitacion(): string {
   const params = new URLSearchParams(window.location.search);
   const token = params.get("i");
   if (token) {
@@ -22,17 +22,19 @@ function leerInvitacion(): { para: string; pases: number } {
       while (b64.length % 4) b64 += "=";
       const bin = atob(b64);
       const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0));
-      const [nombre, pases] = new TextDecoder().decode(bytes).split("|");
-      if (nombre && nombre.trim()) return { para: nombre.trim(), pases: parseInt(pases, 10) };
+      const [nombre] = new TextDecoder().decode(bytes).split("|");
+      if (nombre && nombre.trim()) return nombre.trim();
     } catch {
       /* token dañado: se intenta con ?para= */
     }
   }
-  return {
-    para: (params.get("para") || "").trim(),
-    pases: parseInt(params.get("pases") || "1", 10),
-  };
+  return (params.get("para") || "").trim();
 }
+
+// Comparación sin acentos ni mayúsculas: quien respondió antes de tener
+// nombres asignados pudo escribirlos ligeramente distinto.
+const clave = (x: string) =>
+  x.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
 
 function Corner({ pos }: { pos: "tl" | "tr" | "bl" | "br" }) {
   const t = {
@@ -55,14 +57,10 @@ export default function RSVPSection() {
   const [frozen, setFrozen] = useState(() => Date.now() > DEADLINE.getTime());
   const [nombrePara, setNombrePara] = useState("");
   const [linkLeido, setLinkLeido] = useState(false);
-  // Tope asignado en el panel
-  const [pasesAsignados, setPasesAsignados] = useState(1);
-  // Lo que el invitado va a ocupar: arranca en 1 y nunca pasa del tope
-  const [pasesAUsar, setPasesAUsar] = useState(1);
+  // Nombres que la familia asignó en el panel: una tarjeta por cada uno
+  const [asignados, setAsignados] = useState<string[]>([]);
   const [pasesLoaded, setPasesLoaded] = useState(false);
-  const [choice, setChoice] = useState<"yes" | "no" | null>(null);
-  // Nombres por posición: bajar y volver a subir el contador no borra lo escrito
-  const [nombres, setNombres] = useState<string[]>([]);
+  const [choices, setChoices] = useState<Record<number, "yes" | "no">>({});
   const [status, setStatus] = useState<Status>(null);
   const [loading, setLoading] = useState(false);
   const [yaRespondio, setYaRespondio] = useState(false);
@@ -73,6 +71,7 @@ export default function RSVPSection() {
 
   const cerrado = frozen || bloqueado;
   const sinLink = linkLeido && !nombrePara;
+  const sinAsignados = pasesLoaded && !!nombrePara && asignados.length === 0;
 
   const btnLabel = frozen
     ? t.rsvp.frozenBtn
@@ -87,10 +86,8 @@ export default function RSVPSection() {
   // Precarga desde el panel (autoritativo). Los controles quedan bloqueados
   // hasta que responde, para no confirmar con datos que aún no conocemos.
   useEffect(() => {
-    const { para, pases } = leerInvitacion();
-    const urlP = isNaN(pases) || pases < 1 || pases > 20 ? 1 : pases;
+    const para = leerInvitacion();
     setNombrePara(para);
-    setPasesAsignados(urlP);
     setLinkLeido(true);
 
     if (!para) {
@@ -102,35 +99,36 @@ export default function RSVPSection() {
       .then((r) => r.json())
       .then((resp) => {
         const d = resp?.invitado;
-        let tope = urlP;
-        if (d && typeof d.pases === "number" && d.pases > 0 && d.pases <= 20) {
-          tope = d.pases;
-          setPasesAsignados(tope);
-        }
+        const lista: string[] = Array.isArray(d?.nombres_asignados)
+          ? d.nombres_asignados.filter((x: string) => x && String(x).trim())
+          : [];
+        setAsignados(lista);
         if (d?.bloqueado) setBloqueado(true);
-        if (d && (d.estado === "confirmado" || d.estado === "declino")) {
-          const previos: string[] = (d.nombres_confirmados || []).filter((n: string) => n && n.trim());
-          setNombres(previos);
-          // El contador arranca en cuántos pases había ocupado antes
-          setPasesAUsar(Math.min(tope, Math.max(1, previos.length)));
-          setChoice(d.estado === "confirmado" ? "yes" : "no");
+        if (lista.length && d && (d.estado === "confirmado" || d.estado === "declino")) {
+          const conf: string[] = (d.nombres_confirmados || []).map((n: string) => clave(String(n)));
+          const previas: Record<number, "yes" | "no"> = {};
+          lista.forEach((nm, i) => {
+            previas[i] = d.estado === "declino" ? "no" : conf.includes(clave(nm)) ? "yes" : "no";
+          });
+          setChoices(previas);
           setYaRespondio(true);
-          setGracias({ estado: d.estado, nombres: previos });
+          // Ya hay respuesta guardada: la sección arranca cerrada
+          setGracias({
+            estado: d.estado,
+            nombres: d.estado === "confirmado" ? lista.filter((_, i) => previas[i] === "yes") : [],
+          });
         }
         setPasesLoaded(true);
       })
-      .catch(() => setPasesLoaded(true));
+      .catch(() => {
+        setStatus({ msg: (r) => r.errLoad, err: true });
+        setPasesLoaded(true);
+      });
   }, []);
 
-  function handleSelect(c: "yes" | "no") {
+  function elegir(idx: number, c: "yes" | "no") {
     if (cerrado) return;
-    setChoice(c);
-    setStatus(null);
-  }
-
-  function cambiarPases(n: number) {
-    if (cerrado) return;
-    setPasesAUsar(Math.max(1, Math.min(pasesAsignados, n)));
+    setChoices((prev) => ({ ...prev, [idx]: c }));
     setStatus(null);
   }
 
@@ -140,23 +138,17 @@ export default function RSVPSection() {
       setStatus({ msg: (r) => r.errNoLink, err: true });
       return;
     }
-    if (!choice) {
-      setStatus({ msg: (r) => r.errNoChoice, err: true });
+    if (!asignados.length) {
+      setStatus({ msg: (r) => r.errNoAssigned, err: true });
       return;
     }
-    const lista = choice === "yes"
-      ? nombres.slice(0, pasesAUsar).map((n) => (n || "").trim()).filter(Boolean)
-      : [];
-    if (choice === "yes" && lista.length === 0) {
-      setStatus({ msg: (r) => r.errNoNames, err: true });
+    const faltan = asignados.filter((_, i) => !choices[i]).length;
+    if (faltan > 0) {
+      setStatus({ msg: (r) => r.errPending(faltan), err: true });
       return;
     }
-    if (choice === "yes" && lista.length < pasesAUsar) {
-      const faltan = pasesAUsar - lista.length;
-      setStatus({ msg: (r) => r.errMissing(faltan), err: true });
-      return;
-    }
-    const estado = choice === "yes" ? "confirmado" : "declino";
+    const lista = asignados.filter((_, i) => choices[i] === "yes");
+    const estado = lista.length > 0 ? "confirmado" : "declino";
     setLoading(true);
     setStatus(null);
     try {
@@ -208,39 +200,21 @@ export default function RSVPSection() {
     return () => clearTimeout(id);
   }, [frozen]);
 
-  const togglePillBase: React.CSSProperties = {
+  const miniBtn = (activo: boolean, tono: "yes" | "no"): React.CSSProperties => ({
     flex: 1,
-    padding: "13px 8px",
-    border: "1.5px solid rgba(194,143,69,0.4)",
-    background: "rgba(255,255,255,0.5)",
-    cursor: cerrado ? "not-allowed" : "pointer",
+    padding: "11px 8px",
+    minHeight: 46,
+    borderRadius: 10,
+    border: `1.5px solid ${activo ? (tono === "yes" ? "#263e0f" : "#7d5720") : "rgba(194,143,69,0.4)"}`,
+    background: activo ? (tono === "yes" ? "rgba(28,64,44,0.15)" : "rgba(125,87,32,0.12)") : "rgba(255,255,255,0.6)",
+    color: activo ? (tono === "yes" ? "#263e0f" : "#7d5720") : "#3a3a3a",
     fontFamily: "var(--font-cormorant), serif",
     fontStyle: "italic",
     fontSize: 17,
-    fontWeight: 600,
-    color: "#3a3a3a",
-    borderRadius: 10,
-    transition: "all .25s",
-    opacity: cerrado ? 0.45 : 1,
-  };
-
-  const contadorBtn = (disabled: boolean): React.CSSProperties => ({
-    width: 48,
-    height: 48,
-    flexShrink: 0,
-    borderRadius: "50%",
-    border: "1.5px solid rgba(153,101,21,0.55)",
-    background: "rgba(255,255,255,0.85)",
-    color: "#263e0f",
-    fontFamily: "var(--font-cormorant), serif",
-    fontSize: 28,
     fontWeight: 700,
-    lineHeight: 1,
-    cursor: disabled ? "not-allowed" : "pointer",
-    opacity: disabled ? 0.35 : 1,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    cursor: cerrado ? "not-allowed" : "pointer",
+    opacity: cerrado ? 0.45 : 1,
+    transition: "all .25s",
   });
 
   const msgStyle = (color: string): React.CSSProperties => ({
@@ -256,7 +230,7 @@ export default function RSVPSection() {
     lineHeight: 1.55,
   });
 
-  const btnDisabled = loading || cerrado || !pasesLoaded || sinLink;
+  const btnDisabled = loading || cerrado || !pasesLoaded || sinLink || sinAsignados;
 
   return (
     <section style={{ padding: "64px 24px" }}>
@@ -405,9 +379,14 @@ export default function RSVPSection() {
                   {t.rsvp.errNoLink}
                 </p>
               )}
+              {sinAsignados && !status && (
+                <p style={{ ...msgStyle("#7d5720"), marginTop: 0, marginBottom: 20 }}>
+                  {t.rsvp.errNoAssigned}
+                </p>
+              )}
 
               {/* Display pases */}
-              {nombrePara && (
+              {nombrePara && !sinAsignados && (
                 <div style={{
                   maxWidth: 340,
                   margin: "0 auto 22px",
@@ -427,145 +406,51 @@ export default function RSVPSection() {
                     textTransform: "uppercase",
                     color: "#7d5720",
                     fontWeight: 600,
-                  }}>{pasesLoaded ? pasesLabel(pasesAsignados, lang) : t.rsvp.pasesLabel}</span>
+                  }}>{pasesLoaded ? pasesLabel(asignados.length, lang) : t.rsvp.pasesLabel}</span>
                   <span style={{
                     fontFamily: "var(--font-great-vibes), cursive",
                     fontSize: 42,
                     color: "#263e0f",
                     lineHeight: 1,
-                  }}>{pasesLoaded ? pasesAsignados : "…"}</span>
+                  }}>{pasesLoaded ? asignados.length : "…"}</span>
                 </div>
               )}
 
-              {/* Toggle */}
-              <div style={{ display: "flex", gap: 10, maxWidth: 380, margin: "0 auto 18px" }}>
-                <button
-                  type="button"
-                  disabled={!pasesLoaded || cerrado || sinLink}
-                  onClick={() => handleSelect("yes")}
-                  style={{
-                    ...togglePillBase,
-                    background: choice === "yes" ? "rgba(28,64,44,0.15)" : "rgba(255,255,255,0.5)",
-                    borderColor: choice === "yes" ? "#263e0f" : "rgba(194,143,69,0.4)",
-                    color: choice === "yes" ? "#263e0f" : "#3a3a3a",
-                  }}
-                >
-                  {t.rsvp.yes}
-                </button>
-                <button
-                  type="button"
-                  disabled={!pasesLoaded || cerrado || sinLink}
-                  onClick={() => handleSelect("no")}
-                  style={{
-                    ...togglePillBase,
-                    background: choice === "no" ? "rgba(125,87,32,0.12)" : "rgba(255,255,255,0.5)",
-                    borderColor: choice === "no" ? "#7d5720" : "rgba(194,143,69,0.4)",
-                    color: choice === "no" ? "#7d5720" : "#3a3a3a",
-                  }}
-                >
-                  {t.rsvp.no}
-                </button>
-              </div>
-
-              {/* Contador de pases a ocupar + campos de nombres */}
-              {choice === "yes" && (
-                <>
-                  <p style={{
-                    fontFamily: "var(--font-cormorant), serif",
-                    fontStyle: "italic",
-                    fontWeight: 600,
-                    fontSize: 17.5,
-                    lineHeight: 1.55,
-                    color: "#3a3a3a",
-                    maxWidth: 380,
-                    margin: "6px auto 14px",
-                  }}>
-                    {pasesAsignados === 1 ? t.rsvp.counterOne : t.rsvp.counterMany(pasesAsignados)}
-                  </p>
-
-                  {pasesAsignados > 1 && (
-                    <>
-                      <div style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: 18,
-                        maxWidth: 380,
-                        margin: "0 auto 10px",
-                        padding: "14px 20px",
-                        background: "rgba(194,143,69,0.10)",
-                        border: "1px solid rgba(194,143,69,0.35)",
-                        borderRadius: 14,
-                      }}>
-                        <button
-                          type="button"
-                          aria-label={t.rsvp.counterLess}
-                          disabled={cerrado || pasesAUsar <= 1}
-                          onClick={() => cambiarPases(pasesAUsar - 1)}
-                          style={contadorBtn(cerrado || pasesAUsar <= 1)}
-                        >−</button>
-                        <span aria-live="polite" style={{
-                          fontFamily: "var(--font-great-vibes), cursive",
-                          fontSize: "clamp(42px, 9vw, 54px)",
-                          color: "#263e0f",
-                          lineHeight: 1,
-                          minWidth: 64,
-                          textAlign: "center",
-                        }}>{pasesAUsar}</span>
-                        <button
-                          type="button"
-                          aria-label={t.rsvp.counterMore}
-                          disabled={cerrado || pasesAUsar >= pasesAsignados}
-                          onClick={() => cambiarPases(pasesAUsar + 1)}
-                          style={contadorBtn(cerrado || pasesAUsar >= pasesAsignados)}
-                        >+</button>
-                      </div>
+              {/* Una tarjeta por invitado asignado, con su propio Asistiré / No asistiré */}
+              {asignados.length > 0 && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 380, margin: "0 auto 20px" }}>
+                  {asignados.map((nm, i) => (
+                    <div key={i} style={{
+                      padding: "14px 14px 12px",
+                      borderRadius: 12,
+                      background: choices[i] === "yes"
+                        ? "rgba(28,64,44,0.07)"
+                        : choices[i] === "no"
+                        ? "rgba(125,87,32,0.06)"
+                        : "rgba(255,255,255,0.7)",
+                      border: "1px solid rgba(194,143,69,0.35)",
+                    }}>
                       <p style={{
                         fontFamily: "var(--font-cormorant), serif",
-                        fontSize: 13,
                         fontWeight: 700,
-                        letterSpacing: 3,
-                        textTransform: "uppercase",
-                        color: "#7d5720",
-                        margin: "0 auto 20px",
-                      }}>
-                        {pasesAUsar >= pasesAsignados ? t.rsvp.counterAll : t.rsvp.counterOf(pasesAUsar, pasesAsignados)}
-                      </p>
-                    </>
-                  )}
-
-                  <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 380, margin: "0 auto 18px" }}>
-                    {Array.from({ length: pasesAUsar }, (_, i) => (
-                      <input
-                        key={i}
-                        type="text"
-                        value={nombres[i] || ""}
-                        placeholder={pasesAUsar === 1 ? t.rsvp.namePlaceholderSingle : t.rsvp.namePlaceholderMulti(i + 1)}
-                        maxLength={60}
-                        autoComplete="off"
-                        disabled={cerrado}
-                        onChange={(e) => {
-                          const copy = [...nombres];
-                          copy[i] = e.target.value;
-                          setNombres(copy);
-                        }}
-                        style={{
-                          width: "100%",
-                          padding: "14px 18px",
-                          border: "1.5px solid rgba(194,143,69,0.3)",
-                          borderRadius: 10,
-                          background: "rgba(255,255,255,0.85)",
-                          fontFamily: "var(--font-cormorant), serif",
-                          fontSize: 16,
-                          color: "#3a3a3a",
-                          outline: "none",
-                          minHeight: 50,
-                          WebkitAppearance: "none",
-                        }}
-                      />
-                    ))}
-                  </div>
-                </>
+                        fontSize: 19,
+                        color: "#263e0f",
+                        lineHeight: 1.3,
+                        marginBottom: 10,
+                      }}>{nm}</p>
+                      <div style={{ display: "flex", gap: 8 }}>
+                        <button type="button" disabled={cerrado} aria-pressed={choices[i] === "yes"}
+                          onClick={() => elegir(i, "yes")} style={miniBtn(choices[i] === "yes", "yes")}>
+                          {t.rsvp.yes}
+                        </button>
+                        <button type="button" disabled={cerrado} aria-pressed={choices[i] === "no"}
+                          onClick={() => elegir(i, "no")} style={miniBtn(choices[i] === "no", "no")}>
+                          {t.rsvp.no}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               )}
 
               <button
